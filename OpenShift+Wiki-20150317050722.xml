@@ -1,0 +1,96 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS Contributing</title>
+    <ns>0</ns>
+    <id>86</id>
+      <sha1>4z4frcl8gj9h6ega2h0iqfjzvvsvrva</sha1>
+    <revision>
+      <id>407</id>
+      <timestamp>2015-03-02T10:29:40Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = Contribute to GlusterFS recipes =  This guide details how to use issues and pull requests ...&quot;</comment>
+      <text xml:space="preserve" bytes="2355">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= Contribute to GlusterFS recipes =
+
+This guide details how to use issues and pull requests to improve GlusterFS recipes.
+
+Please stick as close as possible to the guidelines. That way we ensure quality guides and easy to merge requests.
+
+Your Pull Request will be reviewed by one of our devs/volunteers and you will be asked to reformat it if needed. We don't bite and we will try to be as flexible as possible, so don't get intimidated by the extent of the guidelines :)
+
+For better maintainance and clarity, some naming guidelines should be followed. See details in each section below.
+
+== Pull Request title ==
+
+Try to be as more descriptive as you can in your Pull Request title.
+
+== Guides ==
+
+Each installation guide has its own namespace and it should be provided in a &lt;code&gt;README&lt;/code&gt; file so that it renders first when viewing the repository. Submit a new one in &lt;code&gt;install/platform/README.md&lt;/code&gt; (it doesn't have to be strictly in markdown though).
+
+== Scripts ==
+
+You are strongly encouraged to provide a &lt;code&gt;README&lt;/code&gt; file that describes how to use the script. You may have included all the needed info in the script itself (recommended), so you could simply write something between the lines:
+
+&lt;blockquote&gt;This script installs GlusterFS 3.5 on CentOS. Run it with &lt;code&gt;./centos.sh your_domain_name&lt;/code&gt;
+
+For more info and variables you can change, read the comments in the script.
+&lt;/blockquote&gt;
+=== Scripts doing similar things ===
+
+There is a strong possibility that your script will do similar things to what a script already in this repo do. In that case, please work on the existing script and enhance it with your changes. No need to duplicate things.
+
+== What information to put on your guide/script etc (mandatory) ==
+
+If you have an installation guide to provide, fill in the template and place it on top of it or include it in your installation script (commented), again on top. Try to include as many items of this template as you can.
+
+=== Template ===
+
+&lt;pre&gt;Distribution         : 
+GlusterFS version    : 
+Web Server           : 
+Init system          : 
+Database             : 
+Contributors         : 
+Additional Notes     : &lt;/pre&gt;
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

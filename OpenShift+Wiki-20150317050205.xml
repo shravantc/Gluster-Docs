@@ -1,0 +1,75 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Admin Hadoop</title>
+    <ns>0</ns>
+    <id>58</id>
+      <sha1>n3olmxnft3ud5nlrw20fk7sfxqmqbq3</sha1>
+    <revision>
+      <id>336</id>
+      <timestamp>2015-02-26T09:13:36Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = Managing Hadoop Compatible Storage =  GlusterFS provides compatibility for Apache Hadoop a...&quot;</comment>
+      <text xml:space="preserve" bytes="1225">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= Managing Hadoop Compatible Storage =
+
+GlusterFS provides compatibility for Apache Hadoop and it uses the standard file system APIs available in Hadoop to provide a new storage option for Hadoop deployments. Existing MapReduce based applications can use GlusterFS seamlessly. This new functionality opens up data within Hadoop deployments to any file-based or object-based application.
+
+== Advantages ==
+
+The following are the advantages of Hadoop Compatible Storage with GlusterFS:
+
+* Provides simultaneous file-based and object-based access within Hadoop.
+* Eliminates the centralized metadata server.
+* Provides compatibility with MapReduce applications and rewrite is not required.
+* Provides a fault tolerant file system.
+
+=== Pre-requisites ===
+
+The following are the pre-requisites to install Hadoop Compatible Storage :
+
+* Java Runtime Environment
+* getfattr - command line utility
+
+== Installing, and Configuring Hadoop Compatible Storage ==
+
+See the detailed instruction set at https://forge.gluster.org/hadoop/pages/ConfiguringHadoop2
+
+&lt;br /&gt;&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

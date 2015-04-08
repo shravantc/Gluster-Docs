@@ -1,0 +1,417 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>RPC Internals</title>
+    <ns>0</ns>
+    <id>99</id>
+      <sha1>3g535rn1e2c1jea2eqqtl8nwsbfdq9k</sha1>
+    <revision>
+      <id>454</id>
+      <timestamp>2015-03-06T06:21:02Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   === Contents ===  * [[#Overview|1 Overview]] * [[#RPC_Usage|2 RPC Usage]] ** [[#protocol.2F...&quot;</comment>
+      <text xml:space="preserve" bytes="12170">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+=== Contents ===
+
+* [[#Overview|1 Overview]]
+* [[#RPC_Usage|2 RPC Usage]]
+** [[#protocol.2Fclient_Translator|2.1 protocol/client Translator]]
+*** [[#Client_Translator_volume_specification|2.1.1 Client Translator volume specification]]
+*** [[#protocol.2Fclient_Internals|2.1.2 protocol/client Internals]]
+** [[#protocol.2Fserver_Translator|2.2 protocol/server Translator]]
+*** [[#Server_Translator_volume_specification|2.2.1 Server Translator volume specification]]
+*** [[#protocol.2Fserver_Internals|2.2.2 protocol/server Internals]]
+** [[#Auth|2.3 Auth]]
+*** [[#Authenticated_Volspecs|2.3.1 Authenticated Volspecs]]
+*** [[#Auth_Internals|2.3.2 Auth Internals]]
+* [[#glusterd_use_of_RPC|3 glusterd use of RPC]]
+** [[#sample_glusterd_volspec|3.1 sample glusterd volspec]]
+* [[#Libraries|4 Libraries]]
+** [[#rpc-lib|4.1 rpc-lib]]
+*** [[#rpc-clnt.h|4.1.1 rpc-clnt.h]]
+*** [[#rpc-svc.h|4.1.2 rpc-svc.h]]
+** [[#rpc-transport|4.2 rpc-transport]]
+*** [[#socket|4.2.1 socket]]
+*** [[#rdma|4.2.2 rdma]]
+** [[#xdr|4.3 xdr]]
+
+== Overview ==
+
+Gluster uses a transport independent RPC mechanism for communications between cluster processes. Within Gluster the two primary consumers of RPC services are:
+
+* glusterd : used for communications between glusterd management processes.
+* protocol/client and protocol/server translators. This translator pair is inserted in a translator stack to enable a a translator stack to span multiple nodes, such as when a brick is served remotely. The protocol/client and protocol/server translators implement the full translator API, including all allowable FOPS, enabling it to be transparently inserved within a volspec.
+
+== RPC Usage ==
+
+Below RPC usage table is based on references to &lt;code&gt;rpc_clnt_new() ` and `rpcsvc_init()&lt;/code&gt;
+
+{|
+!Module
+!Client
+!Server
+|-
+|api
+|Yes
+|No
+|-
+|cli
+|Yes
+|No
+|-
+|glusterfsd
+|Yes
+|Yes
+|-
+|xlators/mgmt/glusterd
+|Yes
+|Yes
+|-
+|xlators/nfs/server
+|Yes
+|Yes
+|-
+|xlators/protocol/Client
+|Yes
+|No
+|-
+|xlators/protocol/server
+|No
+|Yes
+|}
+
+=== protocol/client Translator ===
+
+==== Client Translator volume specification ====
+
+&lt;pre&gt;volume my_vol-client-0
+    type protocol/client
+    option remote-host 192.168.122.125
+    option remote-subvolume /glusterdata/brick125
+    option transport-type tcp
+end-volume&lt;/pre&gt;
+==== protocol/client Internals ====
+
+Source may be found at: &lt;code&gt;xtalors/protocol/client&lt;/code&gt;
+
+=== protocol/server Translator ===
+
+==== Server Translator volume specification ====
+
+&lt;pre&gt;volume my_vol-server
+    type protocol/server
+    option transport-type tcp
+    option auth.login./glusterdata/brick125.allow 79431724-6ea3-482f-8d2e-7654d8934d83
+    option auth.login.79431724-6ea3-482f-8d2e-7654d8934d83.password be6b8ca2-89fb-4223-b521-d976e3c5f6cd
+    option auth.addr./glusterdata/brick125.allow *
+    subvolumes /glusterdata/brick125
+end-volume&lt;/pre&gt;
+==== protocol/server Internals ====
+
+Source may be found at: &lt;code&gt;xlators/protocol/server&lt;/code&gt;
+
+=== Auth ===
+
+==== Authenticated Volspecs ====
+
+Example of client-side authenticated connection:
+
+&lt;pre&gt;volume my_vol-client-0
+    type protocol/client
+    option remote-host 192.168.122.125
+    option remote-subvolume /glusterdata/brick125
+    option transport-type tcp
+    option username 79431724-6ea3-482f-8d2e-7654d8934d83
+    option password be6b8ca2-89fb-4223-b521-d976e3c5f6cd
+end-volume&lt;/pre&gt;
+Example of server-side authenticated connection:
+
+&lt;pre&gt;volume my_vol-server
+    type protocol/server
+    option transport-type tcp
+    option auth.login./glusterdata/brick125.allow 79431724-6ea3-482f-8d2e-7654d8934d83
+    option auth.login.79431724-6ea3-482f-8d2e-7654d8934d83.password be6b8ca2-89fb-4223-b521-d976e3c5f6cd
+    option auth.addr./glusterdata/brick125.allow *
+    subvolumes /glusterdata/brick125
+end-volume&lt;/pre&gt;
+==== Auth Internals ====
+
+Source may be found at: `xlators/protocol/auth&amp;lt;code&amp;gt; `
+
+== glusterd use of RPC ==
+
+RPC calls within glusterd are localized to the &amp;lt;code&amp;gt;gllusterd-rpc-p[s.c file, which includes references to shared RPC via the collowing includes:
+
+* RPC: &lt;code&gt;rpc-clnt.h&lt;/code&gt; and &lt;code&gt;protocol-common.h&lt;/code&gt;
+* Wire encoding: &lt;code&gt;glusterd1-xhr.h&lt;/code&gt;, &lt;code&gt;cli1-xdr.h&lt;/code&gt; and &lt;code&gt;xdr-generic.h&lt;/code&gt;.
+
+RPC related volume options for glusterd:
+
+&lt;pre&gt;struct volume_options options[] = {
+...
+        { .key   = {&amp;quot;transport-type&amp;quot;},
+          .type  = GF_OPTION_TYPE_ANY,
+        },
+        { .key   = {&amp;quot;transport.*&amp;quot;},
+          .type  = GF_OPTION_TYPE_ANY,
+        },
+        { .key   = {&amp;quot;rpc-auth.*&amp;quot;},
+          .type  = GF_OPTION_TYPE_ANY,
+        },
+        { .key   = {&amp;quot;rpc-auth-allow-insecure&amp;quot;},
+          .type  = GF_OPTION_TYPE_BOOL,
+        },
+...
+};&lt;/pre&gt;
+RPC initialization snippet in glusterd.c init() code:
+
+&lt;pre&gt;        ret = rpcsvc_register_notify (rpc, glusterd_rpcsvc_notify, this);
+...
+        ret = rpcsvc_create_listeners (rpc, this-&amp;gt;options, this-&amp;gt;name);
+...
+        ret = glusterd_program_register (this, rpc, &amp;amp;gd_svc_peer_prog);
+...
+        ret = glusterd_program_register (this, rpc, &amp;amp;gd_svc_cli_prog);
+...
+        ret = glusterd_program_register (this, rpc, &amp;amp;gd_svc_mgmt_prog);
+...
+        ret = glusterd_program_register (this, rpc, &amp;amp;gluster_pmap_prog);
+...
+        ret = glusterd_program_register (this, rpc, &amp;amp;gluster_handshake_prog);
+...&lt;/pre&gt;
+Background on functions called:
+
+* &lt;code&gt;rpcsvc_register_notify (rpc, glusterd_rpcsvc_notify, this)&lt;/code&gt;: call to core RPC notify registration routine located in rpc/rpc-lib/src/rpcsvc.c
+* &lt;code&gt;rpcsvc_create_listeners (rpc, this-&amp;gt;options, this-&amp;gt;name)&lt;/code&gt;: call to core RPC listener registration routine located in rpc/rpc-lib/src/rpcsvc.c
+* &lt;code&gt;glusterd_program_register (this, rpc, &amp;amp;XXX_prog)&lt;/code&gt;: calls core RPC program registration routine (&lt;code&gt;rpcsvc_program_register&lt;/code&gt;) located in rpc/rpc-lib/src/rpcsvc.c
+
+Specific programs registered:
+
+* &lt;code&gt;gd_svc_peer_prog&lt;/code&gt;
+* &lt;code&gt;gd_svc_cli_prog&lt;/code&gt;
+* &lt;code&gt;gd_svc_mgmt_prog&lt;/code&gt;
+* &lt;code&gt;gluster_pmap_prog&lt;/code&gt;
+* &lt;code&gt;gluster_handshake_prog&lt;/code&gt;
+
+=== sample glusterd volspec ===
+
+Sample volspec file for glusterd including reference to rpc. Can be found at `/etc/glusterfs/glusterd.vol `
+
+&lt;pre&gt;volume management
+     type mgmt/glusterd
+     option working-directory /var/lib/glusterd
+     option transport-type socket,rdma
+     option transport.socket.keepalive-time 10
+     option transport.socket.keepalive-interval 2
+     option transport.socket.read-fail-log off
+end-volume&lt;/pre&gt;
+Other functions called:
+
+* rpc_clnt_transport_unix_options_build (&amp;amp;options, socketpath);
+* glusterd_submit_request (peerinfo→rpc, &amp;amp;req, frame, peerinfo→peer, GLUSTERD_PROBE_QUERY, NULL, this, glusterd_probe_cbk, (xdrproc_t)xdr_gd1_mgmt_probe_req);
+** rpc_clnt_submit (rpc, prog, procnum, cbkfn, &amp;amp;iov, count, NULL, 0, iobref, frame, NULL, 0, NULL, 0, NULL);
+* glusterd_submit_reply (req, cli_rsp, NULL, 0, NULL, xdrproc);
+** glusterd_serialize_reply (req, arg, &amp;amp;rsp, xdrproc);
+** rpcsvc_submit_generic (req, &amp;amp;rsp, 1, payload, payloadcount, iobref);
+* xdr_to_generic (*iov, &amp;amp;rsp, (xdrproc_t)xdr_gd1_mgmt_probe_rsp);
+
+== Libraries ==
+
+=== rpc-lib ===
+
+==== rpc-clnt.h ====
+
+&lt;pre&gt;struct rpc_clnt *rpc_clnt_new (dict_t *options, glusterfs_ctx_t *ctx,
+                               char *name, uint32_t reqpool_size);
+
+int rpc_clnt_start (struct rpc_clnt *rpc);
+
+int rpc_clnt_register_notify (struct rpc_clnt *rpc, rpc_clnt_notify_t fn,
+                              void *mydata);
+
+int rpc_clnt_submit (struct rpc_clnt *rpc, rpc_clnt_prog_t *prog,
+                     int procnum, fop_cbk_fn_t cbkfn,
+                     struct iovec *proghdr, int proghdrcount,
+                     struct iovec *progpayload, int progpayloadcount,
+                     struct iobref *iobref, void *frame, struct iovec *rsphdr,
+                     int rsphdr_count, struct iovec *rsp_payload,
+                     int rsp_payload_count, struct iobref *rsp_iobref);
+
+struct rpc_clnt *
+rpc_clnt_ref (struct rpc_clnt *rpc);
+
+struct rpc_clnt *
+rpc_clnt_unref (struct rpc_clnt *rpc);
+
+int rpc_clnt_connection_cleanup (rpc_clnt_connection_t *conn);
+
+void rpc_clnt_set_connected (rpc_clnt_connection_t *conn);
+
+void rpc_clnt_unset_connected (rpc_clnt_connection_t *conn);
+void rpc_clnt_reconnect (void *trans_ptr);
+
+void rpc_clnt_reconfig (struct rpc_clnt *rpc, struct rpc_clnt_config *config);
+
+int rpcclnt_cbk_program_register (struct rpc_clnt *svc,
+                                  rpcclnt_cb_program_t *program, void *mydata);
+
+int
+rpc_clnt_transport_unix_options_build (dict_t **options, char *filepath);
+
+void
+rpc_clnt_disable (struct rpc_clnt *rpc);&lt;/pre&gt;
+==== rpc-svc.h ====
+
+&lt;pre&gt;extern int
+rpcsvc_program_register (rpcsvc_t *svc, rpcsvc_program_t *program);
+
+extern int
+rpcsvc_program_unregister (rpcsvc_t *svc, rpcsvc_program_t *program);
+
+extern int32_t
+rpcsvc_create_listeners (rpcsvc_t *svc, dict_t *options, char *name);
+
+void
+rpcsvc_listener_destroy (rpcsvc_listener_t *listener);
+
+extern int
+rpcsvc_program_register_portmap (rpcsvc_program_t *newprog, uint32_t port);
+
+extern int
+rpcsvc_register_portmap_enabled (rpcsvc_t *svc);
+
+extern rpcsvc_t *
+rpcsvc_init (xlator_t *xl, glusterfs_ctx_t *ctx, dict_t *options,
+             uint32_t poolcount);
+
+int
+rpcsvc_register_notify (rpcsvc_t *svc, rpcsvc_notify_t notify, void *mydata);
+
+int
+rpcsvc_unregister_notify (rpcsvc_t *svc, rpcsvc_notify_t notify, void *mydata);
+
+int
+rpcsvc_submit_message (rpcsvc_request_t *req, struct iovec *proghdr,
+                       int hdrcount, struct iovec *payload, int payloadcount,
+                       struct iobref *iobref);
+
+int
+rpcsvc_submit_generic (rpcsvc_request_t *req, struct iovec *proghdr,
+                       int hdrcount, struct iovec *payload, int payloadcount,
+                       struct iobref *iobref);
+
+extern int
+rpcsvc_error_reply (rpcsvc_request_t *req);
+
+extern int
+rpcsvc_transport_peername (rpc_transport_t *trans, char *hostname, int hostlen);
+
+extern inline int
+rpcsvc_transport_peeraddr (rpc_transport_t *trans, char *addrstr, int addrlen,
+                           struct sockaddr_storage *returnsa, socklen_t sasize);
+
+extern int
+rpcsvc_transport_peer_check (dict_t *options, char *volname,
+                             rpc_transport_t *trans);
+
+extern int
+rpcsvc_transport_privport_check (rpcsvc_t *svc, char *volname,
+                                 rpc_transport_t *trans);
+
+extern int rpcsvc_submit_vectors (rpcsvc_request_t *req);
+
+extern int rpcsvc_request_attach_vector (rpcsvc_request_t *req,
+                                         struct iovec msgvec, struct iobuf *iob,
+                                         struct iobref *ioref, int finalvector);
+
+extern int
+rpcsvc_auth_request_init (rpcsvc_request_t *req);
+
+extern int
+rpcsvc_auth_init (rpcsvc_t *svc, dict_t *options);
+
+extern int
+rpcsvc_auth_transport_init (rpc_transport_t *xprt);
+
+extern int
+rpcsvc_authenticate (rpcsvc_request_t *req);
+
+extern int
+rpcsvc_auth_array (rpcsvc_t *svc, char *volname, int *autharr, int arrlen);
+
+extern gid_t *
+rpcsvc_auth_unix_auxgids (rpcsvc_request_t *req, int *arrlen);
+
+extern int
+rpcsvc_combine_gen_spec_volume_checks (int gen, int spec);
+
+extern char *
+rpcsvc_volume_allowed (dict_t *options, char *volname);
+
+int rpcsvc_callback_submit (rpcsvc_t *rpc, rpc_transport_t *trans,
+                            rpcsvc_cbk_program_t *prog, int procnum,
+                            struct iovec *proghdr, int proghdrcount);
+
+int
+rpcsvc_transport_unix_options_build (dict_t **options, char *filepath);
+
+int
+rpcsvc_set_allow_insecure (rpcsvc_t *svc, dict_t *options);
+
+int
+rpcsvc_auth_array (rpcsvc_t *svc, char *volname, int *autharr, int arrlen);
+
+char *
+rpcsvc_volume_allowed (dict_t *options, char *volname);
+
+rpcsvc_vector_sizer
+rpcsvc_get_program_vector_sizer (rpcsvc_t *svc, uint32_t prognum,
+                                 uint32_t progver, uint32_t procnum);&lt;/pre&gt;
+=== rpc-transport ===
+
+==== socket ====
+
+==== rdma ====
+
+=== xdr ===
+
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,210 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Admin ACLs</title>
+    <ns>0</ns>
+    <id>53</id>
+      <sha1>6potrncymfis2s1gfzpllhtrs92vvhl</sha1>
+    <revision>
+      <id>331</id>
+      <timestamp>2015-02-26T09:05:50Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="5963">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+= '''POSIX Access Control Lists''' =
+
+POSIX Access Control Lists (ACLs) allows you to assign different permissions for different users or groups even though they do not correspond to the original owner or the owning group.
+
+For example: User john creates a file but does not want to allow anyone to do anything with this file, except another user, antony (even though there are other users that belong to the group john).
+
+This means, in addition to the file owner, the file group, and others, additional users and groups can be granted or denied access by using POSIX ACLs.
+
+== Activating POSIX ACLs Support ==
+
+To use POSIX ACLs for a file or directory, the partition of the file or directory must be mounted with POSIX ACLs support.
+
+=== Activating POSIX ACLs Support on Sever ===
+
+To mount the backend export directories for POSIX ACLs support, use the following command:
+
+&lt;code&gt;# mount -o acl&lt;/code&gt;
+
+For example:
+
+&lt;code&gt;# mount -o acl /dev/sda1 /export1&lt;/code&gt;
+
+Alternatively, if the partition is listed in the /etc/fstab file, add the following entry for the partition to include the POSIX ACLs option:
+
+&lt;code&gt;LABEL=/work /export1 ext3 rw, acl 14&lt;/code&gt;
+
+=== Activating POSIX ACLs Support on Client ===
+
+To mount the glusterfs volumes for POSIX ACLs support, use the following command:
+
+&lt;code&gt;# mount –t glusterfs -o acl&lt;/code&gt;
+
+For example:
+
+&lt;code&gt;# mount -t glusterfs -o acl 198.192.198.234:glustervolume /mnt/gluster&lt;/code&gt;
+
+== Setting POSIX ACLs ==
+
+You can set two types of POSIX ACLs, that is, access ACLs and default ACLs. You can use access ACLs to grant permission for a specific file or directory. You can use default ACLs only on a directory but if a file inside that directory does not have an ACLs, it inherits the permissions of the default ACLs of the directory.
+
+You can set ACLs for per user, per group, for users not in the user group for the file, and via the effective right mask.
+
+== Setting Access ACLs ==
+
+You can apply access ACLs to grant permission for both files and directories.
+
+'''To set or modify Access ACLs'''
+
+You can set or modify access ACLs use the following command:
+
+&lt;code&gt;# setfacl –m  file&lt;/code&gt;
+
+The ACL entry types are the POSIX ACLs representations of owner, group, and other.
+
+Permissions must be a combination of the characters &lt;code&gt;r&lt;/code&gt; (read), &lt;code&gt;w&lt;/code&gt; (write), and &lt;code&gt;x&lt;/code&gt; (execute). You must specify the ACL entry in the following format and can specify multiple entry types separated by commas.
+
+{|
+!ACL Entry
+!Description
+|-
+|u:uid:&amp;lt;permission&amp;gt;
+|Sets the access ACLs for a user. You can specify user name or UID
+|-
+|g:gid:&amp;lt;permission&amp;gt;
+|Sets the access ACLs for a group. You can specify group name or GID.
+|-
+|m:&amp;lt;permission&amp;gt;
+|Sets the effective rights mask. The mask is the combination of all access permissions of the owning group and all of the user and group entries.
+|-
+|o:&amp;lt;permission&amp;gt;
+|Sets the access ACLs for users other than the ones in the group for the file.
+|}
+
+If a file or directory already has an POSIX ACLs, and the setfacl command is used, the additional permissions are added to the existing POSIX ACLs or the existing rule is modified.
+
+For example, to give read and write permissions to user antony:
+
+&lt;code&gt;# setfacl -m u:antony:rw /mnt/gluster/data/testfile&lt;/code&gt;
+
+== Setting Default ACLs ==
+
+You can apply default ACLs only to directories. They determine the permissions of a file system objects that inherits from its parent directory when it is created.
+
+To set default ACLs
+
+You can set default ACLs for files and directories using the following command:
+
+&lt;code&gt;# setfacl –m –-set&lt;/code&gt;
+
+For example, to set the default ACLs for the /data directory to read for users not in the user group:
+
+&lt;code&gt;# setfacl –m --set o::r /mnt/gluster/data&lt;/code&gt;
+
+&lt;blockquote&gt;'''Note'''
+
+An access ACLs set for an individual file can override the default ACLs permissions.
+&lt;/blockquote&gt;
+'''Effects of a Default ACLs'''
+
+The following are the ways in which the permissions of a directory's default ACLs are passed to the files and subdirectories in it:
+
+* A subdirectory inherits the default ACLs of the parent directory both as its default ACLs and as an access ACLs.
+* A file inherits the default ACLs as its access ACLs.
+
+== Retrieving POSIX ACLs ==
+
+You can view the existing POSIX ACLs for a file or directory.
+
+'''To view existing POSIX ACLs'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;View the existing access ACLs of a file using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# getfacl&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to view the existing POSIX ACLs for sample.jpg&lt;/p&gt;
+&lt;pre&gt;# getfacl /mnt/gluster/data/test/sample.jpg
+# owner: antony
+# group: antony
+user::rw-
+group::rw-
+other::r--&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;View the default ACLs of a directory using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# getfacl&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to view the existing ACLs for /data/doc&lt;/p&gt;
+&lt;pre&gt;# getfacl /mnt/gluster/data/doc
+# owner: antony
+# group: antony
+user::rw-
+user:john:r--
+group::r--
+mask::r--
+other::r--
+default:user::rwx
+default:user:antony:rwx
+default:group::r-x
+default:mask::rwx
+default:other::r-x&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Removing POSIX ACLs ==
+
+To remove all the permissions for a user, groups, or others, use the following command:
+
+&lt;code&gt;# setfacl -x&lt;/code&gt;
+
+For example, to remove all permissions from the user antony:
+
+&lt;code&gt;# setfacl -x u:antony /mnt/gluster/data/test-file&lt;/code&gt;
+
+== Samba and ACLs ==
+
+If you are using Samba to access GlusterFS FUSE mount, then POSIX ACLs are enabled by default. Samba has been compiled with the &lt;code&gt;--with-acl-support&lt;/code&gt; option, so no special flags are required when accessing or mounting a Samba share.
+
+== NFS and ACLs ==
+
+Currently GlusterFS supports POSIX ACL configuration through NFS mount, i.e. setfacl and getfacl commands work through NFS mount.
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

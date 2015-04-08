@@ -1,0 +1,104 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Translators Overview</title>
+    <ns>0</ns>
+    <id>97</id>
+      <sha1>4ds0shfdkno2s3o0499ps0z0rsq171x</sha1>
+    <revision>
+      <id>450</id>
+      <timestamp>2015-03-06T06:16:24Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   ==== Tutorials ====  Jeff Darcy was kind enough to write up some tutorials on his blog all ...&quot;</comment>
+      <text xml:space="preserve" bytes="3293">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+==== Tutorials ====
+
+Jeff Darcy was kind enough to write up some tutorials on his blog all about getting started with translators. See links to the four articles below:
+
+* [http://hekafs.org/index.php/2011/11/translator-101-class-1-setting-the-stage/ Translator 101 - Setting the Stage] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-2-init-fini-and-private-context/ Translator 101 - Init, Fini and Private Context] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-3-this-time-for-real/ Translator 101 - This Time for Real] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-4-debugging-a-translator/ Translator 101 - Debugging a Translator]
+
+==== Current Translator Status ====
+
+Here is a list of all known translators, with their current status and maintainers. We will gradually add pages for each translator to more easily track and participate in their development.
+
+==== Translator Types ====
+
+Note: This list is not comprehensive and is a work in progress. This is an attempt to offer architectural background and understanding.
+
+Note to devs: If explanations of translator types listed here are not correct, please update them accordingly. These are descriptions based on best effort understanding of what has been published.
+
+{|
+!Translator Type
+!Functional Purpose
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/storage Storage]
+|Lowest level translator, stores and accesses data from local file system.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/debug Debug]
+|Provide interface and statistics for errors and debugging.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/cluster Cluster]
+|Handle distribution and replication of data as it relates to writing to and reading from bricks &amp;amp; nodes.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/encryption Encryption]
+|Extension translators for on-the-fly encryption/decryption of stored data.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/protocol/client Protocol]
+|Interface translators for client / server authentication and communications.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/performance Performance]
+|Tuning translators to adjust for workload and I/O profiles.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Arch/Understanding_Various_Translators#Translator_Inventory Bindings]*
+|Add extensibility, e.g. The Python interface written by Jeff Darcy to extend API interaction with GlusterFS.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Arch/Understanding_Various_Translators#Translator_Inventory System]*
+|System access translators, e.g. Interfacing with file system access control.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/cluster/unify#GlusterFS_Schedulers Scheduler]
+|I/O schedulers that determine how to distribute new write operations across clustered systems.
+|-
+|[http://www.gluster.org/community/documentation/index.php/Translators/features Features]
+|Add additional features such as Quotas, Filters, Locks, etc.
+|}
+
+* - No dedicated context page.
+
+
+&lt;br /&gt;
+&lt;br /&gt;</text>
+    </revision>
+  </page>
+</mediawiki>

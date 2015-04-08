@@ -1,0 +1,684 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Understanding Swift Integration</title>
+    <ns>0</ns>
+    <id>100</id>
+      <sha1>3l3plmb6wexh13i6aa7pokhpskmcjir</sha1>
+    <revision>
+      <id>456</id>
+      <timestamp>2015-03-06T06:23:37Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}    === Contents ===  * [[#Overview|1 Overview]] * [[#OpenStack_Swift|2 OpenStack Swift]] ** [...&quot;</comment>
+      <text xml:space="preserve" bytes="37574">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+
+=== Contents ===
+
+* [[#Overview|1 Overview]]
+* [[#OpenStack_Swift|2 OpenStack Swift]]
+** [[#wsgi_server|2.1 wsgi server]]
+** [[#proxy-server|2.2 proxy-server]]
+*** [[#Object_Controller|2.2.1 Object Controller]]
+*** [[#Account_and_Container_Controllers|2.2.2 Account and Container Controllers]]
+** [[#object-server|2.3 object-server]]
+** [[#account-server|2.4 account-server]]
+** [[#container-server|2.5 container-server]]
+** [[#Swift_Middleware|2.6 Swift Middleware]]
+* [[#Gluster_Integration_with_OpenStack_Swift|3 Gluster Integration with OpenStack Swift]]
+** [[#Mapping_Swift_Concepts_to_Gluster|3.1 Mapping Swift Concepts to Gluster]]
+** [[#Gluster_Plugin|3.2 Gluster Plugin]]
+*** [[#Glusterfs.28dot.29py|3.2.1 Glusterfs(dot)py]]
+*** [[#Gluster_DiskFile_Details_--%3Cem%3EDiskFile%3C/em%3E.28dot.29_py|3.2.2 Gluster_DiskFile Details — DiskFile (dot) py]]
+*** [[#DiskDir_.28dot.29_py|3.2.3 DiskDir (dot) py]]
+*** [[#constraints.28dot.29py|3.2.4 constraints(dot)py]]
+*** [[#Utils_.28dot.29_py|3.2.5 Utils (dot) py]]
+*** [[#swift.2Fcommon.2Fmiddleware.2Fgluster.28dot.29py|3.2.6 swift/common/middleware/gluster(dot)py]]
+** [[#Modifications_to_Swift_code|3.3 Modifications to Swift code]]
+*** [[#proxy-server_2|3.3.1 proxy-server]]
+*** [[#object-server_2|3.3.2 object-server]]
+*** [[#account-server_2|3.3.3 account-server]]
+*** [[#container-server_2|3.3.4 container-server]]
+** [[#Use_of_XATTRs_to_in_support_to_Swift|3.4 Use of XATTRs to in support to Swift]]
+** [[#Key_Differences_between_Gluster_UFO_and_native_SWIFT|3.5 Key Differences between Gluster UFO and native SWIFT]]
+*** [[#Unused_Parameters|3.5.1 Unused Parameters]] '''*''' [[#New_Swift_Features_currently_unimplemented_in_Gluster_UFO|3.5.2 New Swift Features currently unimplemented in Gluster UFO]]
+*** [[#Unused_Swift_Middleware|3.5.3 Unused Swift Middleware]]
+* [[#System_Level_Implications|4 System Level Implications]]
+** [[#Queueing_and_Flow_Control|4.1 Queueing and Flow Control]]
+** [[#Overall_Workload_Implications|4.2 Overall Workload Implications]]
+* [[#Future_Considerations|5 Future Considerations]]
+
+== Overview ==
+
+Gluster leverages elements of the [http://www.openstack.org/software/openstack-storage/ OpenStack Swift] open source project to provide REST based access to Gluster files and directories. This integration is known is known within the Gluster community as UFO, standing for Unified File and Object. While OpenStack Swift itself is a pure object store, the GlusterFS combines file and object access mechanisms enabling any Gluster file to be access via multiple protocols.
+
+By leveraging key components of of the OpenStack Swift implementation, the Gluster integration should be able to preserve full ''crock-for-crock'' API compatability with applications using the OpenStack Swift API.
+
+== OpenStack Swift ==
+
+Additional informaion about Swift can be found under [http://docs.openstack.org/developer/swift/index.html Object Storage Development Documentation] at [http://www.openstack.org/ OpenStack.org].
+
+The [http://docs.openstack.org/developer/swift/overview_architecture.html architecture of OpenStack Swift] if composed of the following mayor elements:
+
+* [http://docs.openstack.org/developer/swift/overview_architecture.html#proxy-server Proxy Server]: Responsible for servicing of incoming REST API requests and assembling response * [http://docs.openstack.org/developer/swift/overview_architecture.html#object-server Object Server]: Responsible for persisting individual objects. Similar to Gluster files * [http://docs.openstack.org/developer/swift/overview_architecture.html#container-server Container Server]: Responsible for maintaining named groups of objects (Containers) similar to directories * [http://docs.openstack.org/developer/swift/overview_architecture.html#account-server Account Server]: Responsible for maintaining groups of Containers with an overall identified owner owner/admin. Similar to volumes * [http://docs.openstack.org/developer/swift/overview_auth.html Auth System]: Pluggable subsystem for authentication and authorization of individual users.
+
+'''Note''': While GlusterFS leverages the full Swift Proxy server, it includes only a shallow integration with the Swift Object, Container and Account Servers. Rather than using the native persistence mechanisms for these servers, the GlusterFS integration substutes references to GlusterFS. Integration is currently via FUSE mounted Gluster volume and Swift-specific extended extended attributes. A more direct integration using libgfapi is anticipated in an upcoming version of GlusterFS.
+
+The Python code for the Swift elements may be found on [https://github.com/openstack/swift/ GitHub]. In addition to these modules, Swift has dependencies on the following Python Libraries:
+
+* [http://docs.webob.org/en/latest/index.html python-webob]: Python wrappers for WSGI request environment and response objects.
+* [http://eventlet.net/doc/examples.html#wsgi-server python-eventlet]: Concurrent networking library, including [http://eventlet.net/doc/modules/wsgi.html eventlet.wsgi module] multi-threaded wsgi server. ALso leverages python-greenlet
+* [http://pythonpaste.org/deploy/ python-pastedeploy]: System for configuration of WSGI servers and apps. Includes concepts on [http://pythonpaste.org/deploy/#composite-applications composite apps], [http://pythonpaste.org/deploy/#filter-composition filters] and [http://pythonpaste.org/deploy/#defining-factories factories].
+
+=== wsgi server ===
+
+The actual wsgi server used by swift for proxy-server, object-server, account-server and container server is the &lt;code&gt;run_wsgi()&lt;/code&gt; function located in common/wsgi.py. Below in an example of the invocation of this function in bin/swift-proxy to create the proxy server:
+
+&lt;pre&gt;from swift.common.utils import parse_options
+from swift.common.wsgi import run_wsgi
+
+if __name__ == '__main__':
+    conf_file, options = parse_options()
+    run_wsgi(conf_file, 'proxy-server', default_port=8080, **options)&lt;/pre&gt;
+Similar code resides in bin/object-server (port 6000), bin/account-server (port 6002) and bin/container-server (port 6001), substituting the appropriate server name and port.
+
+Below is an excerpt of [https://github.com/openstack/swift/blob/master/swift/common/wsgi.py common/wsgi(dot)py] that implements the core wsgi serving capability building upon [http://eventlet.net/doc/modules/wsgi.html#eventlet.wsgi.server eventlet.wsgi.server]. Within the wsgi server concurrency is achieved at two levels:
+
+* The &lt;code&gt;worker&lt;/code&gt; parameter in the corresponding XXX-server(dot)conf config file specifies the number of independent worker processes.
+** proxy-server, object-server, account-server, container-server all currently default to 1 worker process.
+* Each worker process is has a pool of 1000 threads managed via [http://eventlet.net/doc/basic_usage.html#greenthread-control eventlet.GreenPool].
+
+&lt;pre&gt;...
+import eventlet
+from eventlet import greenio, GreenPool, sleep, wsgi, listen
+from paste.deploy import loadapp, appconfig
+from eventlet.green import socket, ssl
+from webob import Request
+from urllib import unquote
+
+...
+def run_wsgi(conf_file, app_section, *args, **kwargs):
+...
+        conf = appconfig('config:%s' % conf_file, name=app_section)
+...
+    # bind to address and port
+    sock = get_socket(conf, default_port=kwargs.get('default_port', 8080))
+    # remaining tasks should not require elevated privileges
+    drop_privileges(conf.get('user', 'swift'))
+...
+    def run_server():
+        wsgi.HttpProtocol.default_request_version = &amp;quot;HTTP/1.0&amp;quot;
+        # Turn off logging requests by the underlying WSGI software.
+        wsgi.HttpProtocol.log_request = lambda *a: None
+        # Redirect logging other messages by the underlying WSGI software.
+        wsgi.HttpProtocol.log_message = \
+            lambda s, f, *a: logger.error('ERROR WSGI: ' + f % a)
+        wsgi.WRITE_TIMEOUT = int(conf.get('client_timeout') or 60)
+        eventlet.hubs.use_hub('poll')
+        eventlet.patcher.monkey_patch(all=False, socket=True)
+        monkey_patch_mimetools()
+        app = loadapp('config:%s' % conf_file,
+                      global_conf={'log_name': log_name})
+        pool = GreenPool(size=1024)
+        try:
+            wsgi.server(sock, app, NullLogger(), custom_pool=pool)
+...
+        pool.waitall()
+
+...
+    while running[0]:
+        while len(children) &amp;lt; worker_count:
+            pid = os.fork()
+            if pid == 0:
+                signal.signal(signal.SIGHUP, signal.SIG_DFL)
+                signal.signal(signal.SIGTERM, signal.SIG_DFL)
+                run_server()
+                logger.notice('Child %d exiting normally' % os.getpid())
+                return
+...
+    greenio.shutdown_safe(sock)
+    sock.close()
+    logger.notice('Exited')&lt;/pre&gt;
+=== proxy-server ===
+
+Note: Excerpts below are from [https://github.com/openstack/swift/blob/master/swift/proxy/server.py swift/blob/master/swift/proxy/server(dot)py] located in the [https://github.com/openstack/swift openstack/swift repository] on github.com.
+
+The proxy-server performs the initial servicing of the request and includes the following classes:
+
+* Controller - Abstract class for request controller,
+* ObjectController - Responsible for handling object-specific accesses (Controller subclass)
+* AccountController - Responsible for handling account-specific accesses (Controller subclass)
+* ContainerController - Responsible for handling container-specific access (Controller sub-class)
+* BaseApplication - Abstract class for top-level proxy application
+* Application - Topy level proxy application (BaseApplication subclass)
+
+The following flow is used for basic request processing:
+
+# Request is initially serviced by Application.handle_request() which passes along request to parent class BaseApplication.handle_request()
+# BaseApplication.handle_request() parses request path (get_controller()) and creates instance of corresponsing controller class is created.
+# Unique transaction ID associated with transaction and associated controller
+# Lookup the controller method corresponding to the request type (GET, HEAD, PUT, POST, DELETE, COPY) Corresponding saved as handler
+# Invoke corresponding handler within transaction conttroller
+
+&lt;pre&gt;class BaseApplication(object):
+    def handle_request(self, req):
+...
+                controller, path_parts = self.get_controller(req.path)
+                p = req.path_info
+...
+            controller = controller(self, **path_parts)
+            if 'swift.trans_id' not in req.environ:
+                # if this wasn't set by an earlier middleware, set it now
+                trans_id = 'tx' + uuid.uuid4().hex
+                req.environ['swift.trans_id'] = trans_id
+                self.logger.txn_id = trans_id
+            req.headers['x-trans-id'] = req.environ['swift.trans_id']
+            controller.trans_id = req.environ['swift.trans_id']
+...
+                handler = getattr(controller, req.method)
+                getattr(handler, 'publicly_accessible')
+...
+            return handler(req)
+...&lt;/pre&gt;
+==== Object Controller ====
+
+'''HEAD and GET''':
+
+''to do'': Verify behavior of container_info(). Is this verifying the presence of the container, or the presence of the object within the container?
+
+Both HEAD and GET requests are executes via common routine HEADorGET. The below excerpt shows basic flow of execution:
+
+# container_info() routine in parent Controller called to verify existance of associated container. container_info() makes similar reference to account_info() to verify existance of account. If both are present, call returns container read acl and object versions)
+# verify if container info already present in memcache, return cached data is available
+# container_info() calls account_info()
+# verify if account info already present in memcache, return if cached data is available
+# account_info makes HEAD request to account/server
+# container_info() makes HEAD request to container/server
+# Verify request authorization, if needed
+# Identify object servers (partitions in Object ring) corresponding to responsible for object
+# Invoke GETorHEAD_base() in Controller parent class to pool nodes and identify response from node with a valid response or the newest valid response (dependeng on x-newest request parameter), returning response.
+# additional processing may be required if large range request or if file has a manefest.
+
+&lt;pre&gt;    def GET(self, req):
+        &amp;quot;&amp;quot;&amp;quot;Handler for HTTP GET requests.&amp;quot;&amp;quot;&amp;quot;
+        return self.GETorHEAD(req, stats_type='GET')
+
+    def HEAD(self, req):
+        &amp;quot;&amp;quot;&amp;quot;Handler for HTTP HEAD requests.&amp;quot;&amp;quot;&amp;quot;
+        return self.GETorHEAD(req, stats_type='HEAD')
+
+    def GETorHEAD(self, req, stats_type):
+        &amp;quot;&amp;quot;&amp;quot;Handle HTTP GET or HEAD requests.&amp;quot;&amp;quot;&amp;quot;
+        start_time = time.time()
+        _junk, _junk, req.acl, _junk, _junk, object_versions = \
+            self.container_info(self.account_name, self.container_name)
+        if 'swift.authorize' in req.environ:
+            aresp = req.environ['swift.authorize'](req)
+            if aresp:
+                self.app.logger.increment('auth_short_circuits')
+                return aresp
+        partition, nodes = self.app.object_ring.get_nodes(
+            self.account_name, self.container_name, self.object_name)
+        shuffle(nodes)
+        resp = self.GETorHEAD_base(req, _('Object'), partition,
+                self.iter_nodes(partition, nodes, self.app.object_ring),
+                req.path_info, len(nodes))
+...
+        return resp&lt;/pre&gt;
+'''POST''': The below excerpt shows basic flow of execution for POST:
+
+# Verify correctness of request metadata
+# Verify presence of account and container
+# Verify request authorization, if needed
+# Identify nodes in ring associated with partition based on object name
+# Invoke make_requests() to issue POST request to each object server to store object value
+# ''Question: Why is more than 1 container included in request?''
+
+&lt;pre&gt;    def POST(self, req):
+...
+            error_response = check_metadata(req, 'object')
+            if error_response:
+                self.app.logger.increment('errors')
+                return error_response
+            container_partition, containers, _junk, req.acl, _junk, _junk = \
+                self.container_info(self.account_name, self.container_name,
+                    account_autocreate=self.app.account_autocreate)
+            if 'swift.authorize' in req.environ:
+                aresp = req.environ['swift.authorize'](req)
+                if aresp:
+                    self.app.logger.increment('auth_short_circuits')
+                    return aresp
+            if not containers:
+                self.app.logger.timing_since('POST.timing', start_time)
+                return HTTPNotFound(request=req)
+...
+            partition, nodes = self.app.object_ring.get_nodes(
+                self.account_name, self.container_name, self.object_name)
+            req.headers['X-Timestamp'] = normalize_timestamp(time.time())
+            headers = []
+            for container in containers:
+                nheaders = dict(req.headers.iteritems())
+                nheaders['Connection'] = 'close'
+                nheaders['X-Container-Host'] = '%(ip)s:%(port)s' % container
+                nheaders['X-Container-Partition'] = container_partition
+                nheaders['X-Container-Device'] = container['device']
+...
+                headers.append(nheaders)
+            resp = self.make_requests(req, self.app.object_ring, partition,
+                                      'POST', req.path_info, headers)
+            self.app.logger.timing_since('POST.timing', start_time)
+            return resp&lt;/pre&gt;
+'''PUT'''
+
+==== Account and Container Controllers ====
+
+=== object-server ===
+
+=== account-server ===
+
+=== container-server ===
+
+=== Swift Middleware ===
+
+The following [https://github.com/openstack/swift/tree/master/swift/common/middleware Swift middleware functions] (filters) are used within the Gluster configuration of Swift:
+
+* healthcheck(dot)py — Healthcheck middleware used for monitoring. If the path is /healthcheck, it will respond with &amp;quot;OK&amp;quot; in the body
+* memcache(dot)py — Caching middleware that manages caching in swift
+* tempauth(dot)py — Test authentication and authorization system.
+
+== Gluster Integration with OpenStack Swift ==
+
+=== Mapping Swift Concepts to Gluster ===
+
+Swift has the concept of Account which are conceptually similar to the home directory for an individual user. All of the users Containers show up under their Account. When integrating with GlusterFS, Accounts are implemented as top-level directories within each GlusterFS Volume exported under UFO.
+
+While Swift Containers are conceptually similar to POSIX file directories, Containers' have have no concept of nesting. When integrating with GlusterFS, a user’s Containers appear as a single level of directories under the top-level directory corresponding to the user’s Account.
+
+While Swift does not support the direct implementation of nested containers, it does support the concept of complex object names that include additional path information such as common prefix information. For example, one might have an object within a container named ` foo/bar/baz ` and perform container listing operations for all objects containing the path prefix of ` for/bar/* `. The GlusterFS integration recognise this pattern and implements this level of implied nesting and maps these slash delimited prefixes as actual nested subdirectors. For the above example, ''foo'' is a subdirectory of the container, ''bar'' is a subdirectory of ''foo'' and baz is the object stored within the ''bar'' directory.
+
+Subject to the special handling of the embedded path prefix information within the object name, there is roughly a 1:1 correspondence between Swift objects and GlusterFS files. For the most part, the object access methods are a subset of POSIX file access methods. Object PUT operations are conceptully similar to file open and wirte operations, except that an object is only written all-or-nothing rather than individual byte range updates within a POSIX file.
+
+'''To Do: Some other things to explore''':
+
+* Swift Object Versioning
+* Swift segmented large objects
+* Handling of user defined object attributes
+* Maintenance of object checksums
+
+=== Gluster Plugin ===
+
+See also [https://github.com/gluster/glusterfs/tree/master/swift/1.4.8/plugins glusterfs/swift/1.4.8/plugins source].
+
+The gluster plugin code lives in [https://github.com/gluster/glusterfs/tree/master/swift/1.4.8/plugins &lt;code&gt;swift/1.4.8/plugin&lt;/code&gt;], where 1.4.8 is the version of the Swift code used as the basis of GlusterFS 3.3. Expect this to change as future versions of GlusterFS are based on upcoming releases of [https://launchpad.net/swift/ OpenStack Swift].
+
+''correct text below once spam filter problem fixed'''
+
+Gluster enablement consists of:
+
+* Glusterfs(dot)py: Implements GlusterFS class corresponding to a Gluster volume mount point and associated mount/unmount operations.
+* DiskFile(dot)py: Implements Gluster_DiskFile class, maps object operations to Gluster file operations and manages object files on disk.
+* DiskDir(dot)py:
+* constraints(dot)py:
+* utils(dot)py: Various utility functions
+
+==== Glusterfs(dot)py ====
+
+See also [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/plugins/Glusterfs.py Glusterfs(dot)py source file].
+
+Implements '''Glusterfs''' object. Managed gluster volume and related FUES mounts associated with exported UFO volume
+
+Key operations include:
+
+* busy_wait(): Helper function — Iterate for definite number of time over a given interval for successful mount
+* mount(): Mounts volume, if needed.
+* unmount():
+* get_export_list_local(): Returns info from ''gluster volume info'' command
+* get_export_list_remote(): Similar to abovem but for remote volumes, executes ''ssh %s gluster volume info'' commend
+* get_export_list(): Calles either get_export_list_remote() or get_export_list_local() as appropriate
+* get_export_from_account_id(): Returns local or remote export associated with account
+
+'''To Do''': ''Items to explore further'':
+
+* Is there a more efficient way to handle get_export_from_account_id() since export can be derived directly from account my removing ''AUTH_'' prefix
+* support for remote clusters, including remote_cluster configuration property, self.remote_cluster variable and get_remore_export_list()
+
+==== Gluster_DiskFile Details — DiskFile (dot) py ====
+
+See also [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/plugins/DiskFile.py DiskFile(dot)py source file].
+
+Implements '''Gluster_DiskFile''' object. Manages files on disk
+
+Information associated with an individual DiskFile object include:
+
+* path: path to devices on the node/mount path for UFO.
+* device: device name/account_name for UFO.
+* partition: partition on the device the object lives in
+* account: account name for the object
+* container: container name for the object
+* obj: object name for the object
+* keep_data_fp: if True, don’t close the fp, otherwise close it
+* disk_chunk_Size: size of chunks on file reads
+
+Key operations include:
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;close(): Close the file. Will handle quarantining file if necessary.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;is_deleted(): Check if the file is deleted.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;create_dir_object(): Used when object name contains prefix(es)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;put_metadata(): put(): Finalize writing the file on disk, and renames it from the temp file to the real location. This should be called after the data has been written to the temp file.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;put(): Finalize writing the file on disk, and renames it from the temp file to the real location. This should be called after the data has been written to the temp file.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;unlinkold(): Remove any older versions of the object file. Any file that has an older timestamp than timestamp will be deleted.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;unlink(): Remove the file.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;get_data_file_size(): Returns the os.path.getsize for the file. Raises an exception if this file does not match the Content-Length stored in the metadata.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;update_object():&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;filter_metadata():&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mkstemp(): Contextmanager to make a temporary file.&lt;/p&gt;
+&lt;pre&gt; +
+ Note: Because of the all or nothing nature of object PUT operations, an
+uploaded object is initially uploaded to a temporary file which is later
+linked to the path name upon successful completion of the PUT operation.&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+'''QUESTION''': ''What is the performance impact of this two step operation?''
+
+* ''What is impact on directory operations?''
+* ''What is impact on data locality and need to DHT linkto operations?''
+* ''Show we storage the temporary file on the proxy server instead of the directly with gluster?''
+* ''Is there a way to optimize this rename operation within the POSIX or DHT layers rather than handling this at the top of the gluster stack?'''
+* ''Is there a way to either''
+
+==== DiskDir (dot) py ====
+
+See also [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/plugins/DiskDir.py DiskFile(dot)py source file].
+
+Implements the following classes:
+
+* DiskCommon:
+* DiskDir: Manage object files on disk (extends DiskCommon)
+* DiskAccount: Manages Account directory (extends DiskDir)
+
+'''class DiskCommon(object)''': Operations:
+
+* is_deleted(): Determine it item (self) still exists
+* filter_prefix(): Returns subset of entries matching filter. Accept sorted list.
+* filter_delimiter(): Parses filtered list, splitting prefix and suffix at delimeter. Accept sorted list. Objects should start with prefix.
+* filter_marker(): Range filtering — Returns all entries after (and including) starting point
+* filter_end_marker(): Range filtering Returns all entries prior to stopping-point marker. Accept sorted list.
+* filter_limit(): Returns setset of entries list
+* update_account(): Updates account metadata, both cached in-memry and on disk.
+
+'''class DiskDir()''': Extends DiskCommon
+
+&lt;pre&gt;    :param path: path to devices on the node
+    :param device: device name
+    :param partition: partition on the device the object lives in
+    :param account: account name for the object
+    :param container: container name for the object
+    :param obj: object name for the object
+    :param keep_data_fp: if True, don't close the fp, otherwise close it
+    :param disk_chunk_Size: size of chunks on file reads&lt;/pre&gt;
+Operations:
+
+* empty():
+* delete():
+* put_metadata(): Write metadata to directory/container.
+* put(): Create and write metatdata to directory/container.
+* put_obj():
+* delete_obj():
+* put_container(): For account server.
+* delete_container(): For account server.
+* unlink(): Remove directory/container if empty.
+* list_objects_iter(): Returns tuple of name, created_at, size, content_type, etag.
+* update_container():
+* update_object_count():
+* update_container_count():
+* get_info(): Get global data for the container.
+* update_put_timestamp(): Create the container if it doesn’t exist and update the timestamp
+* delete_object():
+* delete_db(): Delete the container
+* update_metadata():
+
+'''class DiskAccount()''': Extends DiskDir Operations:
+
+* list_containers_iter():Return tuple of name, object_count, bytes_used, 0(is_subdir). Used by account server.
+* get_info(): Get global data for the account.
+
+==== constraints(dot)py ====
+
+See also [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/plugins/constraints.py constraints(dot)py source file].
+
+Functions:
+
+* validate_obj_name(): Verified name correctness — length of name, to ''.'' or ''..'' in name
+* check_object_creation():Check to ensure that everything is alright about an object to be created — within max file size, validation of name syntax, includes content-type, corrextness of object manifest.
+
+==== Utils (dot) py ====
+
+See also [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/plugins/utils.py utils(dot)py source file].
+
+Includes:
+
+* mkdirs(): Ensured path is a directory, makes if necessary
+* rmdirs(): Removes directory if already exists
+* dir_empty(): Conditional
+* read_metadata(): Helper function to read the pickled metadata from a File/Directory
+* write_matedata(): Helper function to write pickled metadata for a File/Directory
+* clean_metadata():
+* update_list():
+* is_marker():
+* get_container_details(), get_account_details(): Return object/container_list, object/container_count and bytes_used (container only).
+** get_XXX_details_from_fs: get container/account details by traversing the filesystem
+** get_XXX_details_from_memcache: get container/account details stored in memcache
+* get_etag():
+* get_object_metadata(), get_container_metadata(c), get_account_metadata(): Return metadata of object/container/account.
+* restore_object(), restore_container(), restore_account():
+* create_object_metadata(), create_container_metadata(), create_account_metadata():
+* check_account_exists():
+* get_account_list():
+* get_account_id():
+* do_mkdir(), do_mkdirs(), do_listdir(), do_chown(), do_stat(), do_open(), do_close(), do_unlink, do_rmdir(), do_rename(), do_setxattr(), do_getxattr(), do_removexattr() : Performs actual file and/or directory operation
+* strip_object_storage_path(): removes /mnt/gluster-object from gluster path name
+* get_device_from_account()
+* check_user_xattr():
+* check_valid_account(): Make sure associated volume for account is mounted.
+* validate_container(): Validates container metadata
+* validate_account(): Validates account metadata
+* validate_object(): Validates object metadata
+
+'''Questions''':
+
+* ''Should we extend check_account_validate() with configuration option to create accounts on demand for the service provider use-case?''
+* What is the purpose of check_user_xattr? Seems to set xattr then immediated remove same xattr.
+
+==== swift/common/middleware/gluster(dot)py ====
+
+&lt;pre&gt;class Gluster_plugin(object):
+    &amp;quot;&amp;quot;&amp;quot;
+    Update the environment with keys that reflect Gluster_plugin enabled
+    &amp;quot;&amp;quot;&amp;quot;
+
+    def __init__(self, app, conf):
+        self.app = app
+        self.conf = conf
+        self.fs_name = 'Glusterfs'
+        self.logger = get_logger(conf, log_route='gluster')
+
+    def __call__(self, env, start_response):
+        if not plugin_enabled():
+            return self.app(env, start_response)
+        env['Gluster_enabled'] =True
+        fs_object = getattr(plugins, self.fs_name, False)
+        if not fs_object:
+            raise Exception('%s plugin not found', self.fs_name)
+
+        env['fs_object'] = fs_object()
+        fs_conf = ConfigParser()
+        if fs_conf.read('/etc/swift/fs.conf'):
+            try:
+                env['root'] = fs_conf.get ('DEFAULT', 'mount_path')
+            except NoSectionError, NoOptionError:
+                self.logger.exception(_('ERROR mount_path not present'))
+        return self.app(env, start_response)
+
+def filter_factory(global_conf, **local_conf):
+    &amp;quot;&amp;quot;&amp;quot;Returns a WSGI filter app for use with paste.deploy.&amp;quot;&amp;quot;&amp;quot;
+    conf = global_conf.copy()
+    conf.update(local_conf)
+
+    def gluster_filter(app):
+        return Gluster_plugin(app, conf)
+    return gluster_filter&lt;/pre&gt;
+&lt;pre&gt;+&lt;/pre&gt;
+=== Modifications to Swift code ===
+
+The included [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/swift.diff swift(dot)diff] is used to apply modifications to the standard OpenStack Swift distribution to incorporate gluster-specific changes.
+
+Below is a summary of file modifications common to all server variants:
+
+* [https://github.com/openstack/swift/blob/stable/essex/setup.py setup(dot)py] '''adds reference to common.middleware.gluster:filter_factorygluster in entry_points for paste.filter_factory * [https://github.com/openstack/swift/blob/stable/essex/swift/common/utils.py swift/common/utils(dot)py]''' add definition of plugin_enabled()
+
+==== proxy-server ====
+
+Swift(dot)diff results in the following changes to proxy server files:
+
+* [https://github.com/openstack/swift/blob/stable/essex/swift/proxy/server.py swift/proxy/server(dot)py] '''adds plugin_enabled''' imports check_object_creation, MAX_ACCOUNT_NAME_LENGTH, MAX_CONTAINER_NAME_LENGTH, MAX_FILE_SIZE from swift.plugin.constraints instead of swift.common.constraints * [http://www.gluster.org/community/documentation/index.php/Dougw:Understanding_Swift_Integration#swift.2Fcommon.2Fmiddleware.2Fgluster.28dot.29py swift/common/middleware/gluster(dot)py] — New File contained in [https://github.com/gluster/glusterfs/blob/master/swift/1.4.8/swift.diff swift.diff] — Update the environment with keys that reflect Gluster_plugin enabled '''defines class Gluster_plugin''' wsgi plug-in for paste.deploy
+
+When used within Gluster, the Swift proxy-server pipeline is composed of:
+
+* [https://github.com/openstack/swift/blob/master/swift/common/middleware/healthcheck.py filter:health-check] * [https://github.com/openstack/swift/blob/master/swift/common/middleware/memcache.py filter:cache] - memcache based caching middleware * [https://github.com/openstack/swift/blob/master/swift/common/middleware/tempauth.py filter:tempauth] - basic authentication middleware * [https://github.com/openstack/swift/blob/master/swift/proxy/server.py app:proxy-server] - actual implementation of proxy server function
+
+The following middleware fileter commonly used in the proxy-server pipeline for a standard OpenStack Swift deployment are not currently used when configured with Gluster:
+
+* catch_errors
+* ratelimit
+* proxy-loggingr
+
+==== object-server ====
+
+Swift(dot)diff results in the following changes to object server files:
+
+* [https://github.com/openstack/swift/blob/stable/essex/swift/obj/server.py swift/obj/server(dot)py] '''adds support for concept of plug-in and more specificallly concept of a Gluster_DiskFile (from DiskFile(dot)py''' adds get_DiskFile() and replaces reference to DiskFile with getDiskFile '''modifies PUT to add X_TYPE: OBJECT and X_OBJECT_TYPE: FILE meta data''' modifies PUT to substitute account for device in x-trans-id
+
+When used within Gluster, the Swift object-server pipeline is composed of:
+
+* [[#swift.2Fcommon.2Fmiddleware.2Fgluster.28dot.29py|filter:gluster]]
+** includes gluster plunin as filter * [https://github.com/openstack/swift/blob/master/swift/obj/server.py app:object-server]
+** actual implementation of object server function
+
+==== account-server ====
+
+Swift(dot)diff results in the following changes to account server files:
+
+* [https://github.com/openstack/swift/blob/stable/essex/swift/account/server.py swift/account/server(dot)py] — changes to AccountController '''adds support for concept of plug-in and more specificallly concept of a DiskAccount (from DiskDir(dot)py''' adds variant of account as a fs_object and conditionalized code when this is the case ** removes timestamp from metadata updates and header updates
+
+When used within Gluster, the Swift account-server pipeline is composed of:
+
+* [[#swift.2Fcommon.2Fmiddleware.2Fgluster.28dot.29py|filter:gluster]]
+** includes gluster plunin as filter * [https://github.com/openstack/swift/blob/master/swift/account/server.py app:account-server]
+** actual implementation of account server function
+
+==== container-server ====
+
+Swift(dot)diff results in the following changes to container server files:
+
+* [https://github.com/openstack/swift/blob/stable/essex/swift/container/server.py swift/container/server(dot)py] '''adds support for concept of plug-in and more specificallly concept of a DiskDir (from DiskDir(dot)py''' modifies ContainerController object to support fs_object, where fs_object is implemented as DiskDir '''removes timestamp from metadata update and header update''' modifies _get_ContainerBroker to return DiskDir '''modifies PUT, POST do not include timestamp during metadata.update''' modifies HEAD , GET to ignore timestamp ** defines plugin() and references in ''call''
+
+When used within Gluster, the Swift container-server pipeline is composed of:
+
+* [[#swift.2Fcommon.2Fmiddleware.2Fgluster.28dot.29py|filter:gluster]]
+** includes gluster plunin as filter * [https://github.com/openstack/swift/blob/master/swift/container/server.py app:container-server]
+** actual implementation of container server function
+
+=== Use of XATTRs to in support to Swift ===
+
+=== Key Differences between Gluster UFO and native SWIFT ===
+
+==== Unused Parameters ====
+
+'''Need to verify'''
+
+The following proxy-server configuration parameters are not currently used in the defualt Gluster UFO deployment:
+
+* object-chunk-size
+* client-chunk-size
+* client-timeout
+* conn-timeout
+* account-autocreate — Note: May be of interest for service provider deployments with customer front-end/auth layer
+* allow-account-management
+* object-post-as-copy
+
+==== New Swift Features currently unimplemented in Gluster UFO ====
+
+The following features were implemented in the Essex release of Swift and may not yet be enabled in Gluster:
+
+* Object Expiration
+* formpost and tempurl middleware
+* Openstack auth 2.0 API
+* Optional Object Versioning, includes X-Version-Location
+* User defined container synchronization, includes X-Container-Sync-To and X-Container-Sync-Key
+* Swift CLI
+
+==== Unused Swift Middleware ====
+
+The following middleware modules ([https://github.com/openstack/swift/tree/master/swift/common/middleware swift/common/middleware]) are not currently used by the Gluster Swift Plugin:
+
+* catch_errors(dot)py --Middleware that provides high-level error handling and ensures that a transaction id will be set for every request
+* cname_lookup(dot)py — Middleware that translates an unknown domain in the host header to something that ends with the configured storage_domain by looking up the given domain’s CNAME record in DNS.
+* domain_remap(dot)py — Middleware that translates container and account parts of a domain to path parameters that the proxy server understands.
+* formpost(dot)py — Translates a browser form post into a regular Swift object PUT.
+* keystone(dot)py — Swift middleware to Keystone authorization system
+* name_check(dot)py — A filter that disallows any paths that contain defined forbidden characters or that exceed a defined length.
+* proxy_logging(dot)py — Logging middleware for the Swift proxy.
+* ratelimit(dot)py — Rate limits requests on both an Account and Container level. Limits are configurable.
+* recon(dot)py — Recon middleware used for monitoring. /recon/load|mem|async… will return various system metrics.
+* staticweb(dot)py — This StaticWeb WSGI middleware will serve container data as a static web site with index file and error file resolution and optional file listings. This mode is normally only active for anonymous requests. If you want to use it with authenticated requests, set the ``X-Web-Mode: true`` header on the request.
+* tempurl(dot)py — Allows the creation of URLs to provide temporary access to objects.
+
+== System Level Implications ==
+
+=== Queueing and Flow Control ===
+
+=== Overall Workload Implications ===
+
+== Future Considerations ==
+
+# Would there be any value in substituting [http://pypi.python.org/pypi/Spawning/ Spawning] for [http://eventlet.net/doc/modules/wsgi.html#eventlet.wsgi.server eventlet.wsgi.server] in [[#wsgi_server|#wsgi server]] (wsgi(dot)py)?
+
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

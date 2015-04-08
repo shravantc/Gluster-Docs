@@ -1,0 +1,90 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Then, Now, In The Future</title>
+    <ns>0</ns>
+    <id>74</id>
+      <sha1>5e4c5kfg4r1egr31gko675jkt7yp3wq</sha1>
+    <revision>
+      <id>372</id>
+      <timestamp>2015-02-27T07:11:17Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <comment>/* 3.3.x is rapidly aging and is effectively EOL. */</comment>
+      <text xml:space="preserve" bytes="2315">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+===GlusterFS 3.6===
+
+====GlusterFS 3.6.2 is our latest release.====
+&lt;br /&gt;
+[http://download.gluster.org/pub/gluster/glusterfs/3.6/LATEST/ Download the latest 3.6.2 here]&lt;br /&gt;
+[https://github.com/gluster/glusterfs/blob/release-3.6/doc/release-notes/3.6.0.md Read the release notes]&lt;br /&gt;
+&lt;br /&gt;
+===GlusterFS next versions===
+&lt;br /&gt;
+[http://www.gluster.org/community/documentation/index.php/Planning37 GlusterFS 3.7 planning pages]&lt;br /&gt;
+[http://www.gluster.org/community/documentation/index.php/Planning40 GlusterFS 4.0 planning pages]&lt;br /&gt;
+&lt;br /&gt;
+===GlusterFS 3.5===
+&lt;br /&gt;
+====GlusterFS 3.5.3 is the latest stable release.====
+&lt;br /&gt;
+[http://blog.gluster.org/2014/11/glusterfs-3-4-6-and-glusterfs-3-5-3-released/ Release announcement]&lt;br /&gt;
+[http://download.gluster.org/pub/gluster/glusterfs/3.5/LATEST/ See here for downloads]&lt;br /&gt;
+&lt;br /&gt;
+Please see these links and send any questions to [https://lists.gnu.org/mailman/listinfo/gluster-devel gluster-devel].&lt;br /&gt;
+&lt;br /&gt;
+[http://www.gluster.org/community/documentation/index.php/Features35 Features included in 3.5] - this is the list of all new features we're including in GlusterFS 3.5, with links to their respective feature description pages&lt;br /&gt;
+[http://www.gluster.org/community/documentation/index.php/Upgrade_to_3.5 Upgrade to 3.5] - IMPORTANT! Please read before upgrading to GlusterFS 3.5.&lt;br /&gt;
+&lt;br /&gt;
+===GlusterFS 3.4===
+&lt;br /&gt;
+====GlusterFS 3.4.6 is a mature release and is suitable for production environments.====
+&lt;br /&gt;
+[http://download.gluster.org/pub/gluster/glusterfs/3.4/LATEST/ Download it].&lt;br /&gt;
+[https://github.com/gluster/glusterfs/blob/release-3.4/doc/release-notes/3.4.6.md 3.4.6 Release Notes].&lt;br /&gt;
+[http://www.gluster.org/community/documentation/index.php/Features34 Features included in 3.4] - this is the list of all new features in in GlusterFS 3.4, with links to their respective feature description pages&lt;br /&gt;
+[https://vbellur.wordpress.com/2013/07/15/upgrading-to-glusterfs-3-4/ Upgrade to 3.4] - IMPORTANT! Please read before upgrading to GlusterFS 3.4.&lt;br /&gt;
+&lt;br /&gt;
+===GlusterFS 3.3===
+&lt;br /&gt;
+3.3.x is rapidly aging and is effectively EOL.
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

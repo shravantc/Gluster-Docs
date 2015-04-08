@@ -1,0 +1,328 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Gluster Internals- Jeff Darcy</title>
+    <ns>0</ns>
+    <id>98</id>
+      <sha1>evbywy88oxsnwdzv40fd8cuguad4cs0</sha1>
+    <revision>
+      <id>452</id>
+      <timestamp>2015-03-06T06:19:00Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  See also:  * [http://www.gluster.org/documentation/architecture/internals/Dougw:Understandin...&quot;</comment>
+      <text xml:space="preserve" bytes="9733">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+See also:
+
+* [http://www.gluster.org/documentation/architecture/internals/Dougw:Understanding_Various_Translators Understanding Various Translators]
+* [http://www.gluster.org/documentation/architecture/internals/Dougw:Understanding_RPC_Internals Understanding RPC Internals]
+* [http://www.gluster.org/documentation/architecture/internals/GeoRep_Prior_Work Current GeoRep]
+* [http://www.gluster.org/documentation/architecture/internals/Dougw:Understanding_Swift_Integration UFO and Swift Integration]
+
+=== Contents ===
+
+* [[#Getting_Started:_Jeff_Darcy_Tutorials|1 Getting Started: Jeff Darcy Tutorials]]
+* [[#Translator_API|2 Translator API]]
+** [[#External_APIs|2.1 External APIs]]
+** [[#Internal_APIs|2.2 Internal APIs]]
+* [[#Gluster_CLI|3 Gluster CLI]]
+** [[#Hooks_Mechanism|3.1 Hooks Mechanism]]
+* [[#Configuration_and_Vol_Files|4 Configuration and Vol Files]]
+** [[#Sample_Glusterd_Vol_File|4.1 Sample Glusterd Vol File]]
+** [[#Sample_Client-side_Vol_File|4.2 Sample Client-side Vol File]]
+** [[#Sample_Server-side_Vol_File|4.3 Sample Server-side Vol File]]
+** [[#Brick_file|4.4 Brick file]]
+
+== Getting Started: Jeff Darcy Tutorials ==
+
+An excellent set of tutorials can be found on [http://cloudfs.org/blog hekafs.org blog]
+
+* [http://hekafs.org/index.php/2011/11/translator-101-class-1-setting-the-stage Translator 101 Lesson 1: Setting the Stage] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-2-init-fini-and-private-context Translator 101 Lesson 2: init, fini, and private context] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-3-this-time-for-real Translator 101 Lesson 3: This Time For Real] * [http://hekafs.org/index.php/2011/11/translator-101-lesson-4-debugging-a-translator Translator 101 Lesson 4: Debugging a Translator]
+
+== Translator API ==
+
+=== External APIs ===
+
+GlusterFS uses Extended Attributes as a mechanism for external interaction with translators. Unlike the static values of a transitional Posix file or directory access, Glusterfs xattr values can be dynamically generated and setxattr can be thought of as a form of method invocation. The HekaFs Blog contains a good discussion of [http://hekafs.org/index.php/2011/04/glusterfs-extended-attributes/ GlusterFS Extended Attributes].
+
+Glusterfs extended attributes include:
+
+* trusted.glusterfs.afr
+** trusted.glusterfs.afr.data-pending
+** trusted.glusterfs.afr.metadata-pending
+** trusted.glusterfs.afr.entry-pending
+* client
+** trusted.glusterfs.client-connect
+** trusted.glusterfs.client-disconnect
+** trusted.glusterfs.clientlk-dump
+* trusted.glusterfs.createtime
+* trusted.glusterfs.dht
+** trusted.glusterfs.dht.linkto
+* trusted.glusterfs.node-uuid
+* trusted.glusterfs.pathinfo
+* trusted.glusterfs.pump
+** trusted.glusterfs.pump-path
+** trusted.glusterfs.pump-source-complete
+** trusted.glusterfs.pump-sink.complete
+* trusted.glusterfs.quota
+** trusted.glusterfs.quota.dirty
+** trusted.glusterfs.quotq.size
+** trusted.glusterfs.quota.*.contri
+** trusted.glusterfs-quota-du
+* trusted.glusterfs.set-log-level
+** trusted.glusterfs.*.set-log-level
+*** trusted.glusterfs.fuse.set-log-level
+* trusted.glusterfs.syslog
+* trusted.glusterfs.test
+* trusted.glusterfs.version
+* volume
+** trusted.glusterfs.volume-id
+** trusted.glusterfs.volume-mark
+* trusted.glusterfs.xtime or system.glusterfs.xtime
+** trusted.glusterfs.*.xtime
+
+Other extended attributes include:
+
+* trusted.afr.createtime
+* trusted.afr.version
+* trusted.afr.volume
+* trusted.distribute.linkinfo
+* trusted.gfid
+* trusted.limit.list
+* trusted.quota*
+* trusted.testing
+* trusted.xattr-test
+
+=== Internal APIs ===
+
+Gluster translator APIs are contained in &lt;code&gt;libglusterfs&lt;/code&gt;. Useful documentation of the various APIs can be found on [http://hekafs.org/dist/xlator_api_2.html Hekafs.org].
+
+APIs and support functions includes:
+
+* Dispatch Tables and Default Functions
+* STACK_WIND and STACK_UNWIND
+* Per Request Context
+* Inode and File Descriptor Context
+* Dictionaries and Translator Options
+* logging
+* Child Enumeration and Fan Out
+
+Gluster file and directory operations closely model those of FUSE. The [http://fuse.sourceforge.net/doxygen/structfuse__operations.html FUSE sourceforge site] contains useful information on definition of many of these operations.
+
+== Gluster CLI ==
+
+=== Hooks Mechanism ===
+
+Hooks Mechanisms:
+
+Hooks — from: glusterfs / xlators / mgmt / glusterd / src / glusterd-hooks.c
+
+&lt;pre&gt;#define EMPTY &amp;quot;&amp;quot;
+char glusterd_hook_dirnames[GD_OP_MAX][256] =
+{
+        [GD_OP_NONE] = EMPTY,
+        [GD_OP_CREATE_VOLUME] = &amp;quot;create&amp;quot;,
+        [GD_OP_START_BRICK] = EMPTY,
+        [GD_OP_STOP_BRICK] = EMPTY,
+        [GD_OP_DELETE_VOLUME] = &amp;quot;delete&amp;quot;,
+        [GD_OP_START_VOLUME] = &amp;quot;start&amp;quot;,
+        [GD_OP_STOP_VOLUME] = &amp;quot;stop&amp;quot;,
+        [GD_OP_DEFRAG_VOLUME] = EMPTY,
+        [GD_OP_ADD_BRICK] = &amp;quot;add-brick&amp;quot;,
+        [GD_OP_REMOVE_BRICK] = &amp;quot;remove-brick&amp;quot;,
+        [GD_OP_REPLACE_BRICK] = EMPTY,
+        [GD_OP_SET_VOLUME] = &amp;quot;set&amp;quot;,
+        [GD_OP_RESET_VOLUME] = EMPTY,
+        [GD_OP_SYNC_VOLUME] = EMPTY,
+        [GD_OP_LOG_ROTATE] = EMPTY,
+        [GD_OP_GSYNC_SET] = EMPTY,
+        [GD_OP_PROFILE_VOLUME] = EMPTY,
+        [GD_OP_QUOTA] = EMPTY,
+        [GD_OP_STATUS_VOLUME] = EMPTY,
+        [GD_OP_REBALANCE] = EMPTY,
+        [GD_OP_HEAL_VOLUME] = EMPTY,
+        [GD_OP_STATEDUMP_VOLUME] = EMPTY,
+        [GD_OP_LIST_VOLUME] = EMPTY,
+        [GD_OP_CLEARLOCKS_VOLUME] = EMPTY,
+        [GD_OP_DEFRAG_BRICK_VOLUME] = EMPTY,
+};&lt;/pre&gt;
+== Configuration and Vol Files ==
+
+=== Sample Glusterd Vol File ===
+
+Used to configure the glusterd management agent. Can be found at `/etc/glusterfs/glusterd.vol `
+
+&lt;pre&gt;volume management
+     type mgmt/glusterd
+     option working-directory /var/lib/glusterd
+     option transport-type socket,rdma
+     option transport.socket.keepalive-time 10
+     option transport.socket.keepalive-interval 2
+     option transport.socket.read-fail-log off
+end-volume&lt;/pre&gt;
+=== Sample Client-side Vol File ===
+
+Used to configure each volume available to a client. Files can be found in &lt;code&gt;/var/lib/glusterd/vols/vol_name/&lt;/code&gt; subdirectory
+
+&lt;pre&gt;volume my_vol-client-0
+    type protocol/client
+    option remote-host 192.168.122.125
+    option remote-subvolume /glusterdata/brick125
+    option transport-type tcp
+end-volume
+
+volume my_vol-client-1
+    type protocol/client
+    option remote-host 192.168.122.236
+    option remote-subvolume /glusterdata/brick236
+    option transport-type tcp
+end-volume
+
+volume my_vol-dht
+    type cluster/distribute
+    subvolumes my_vol-client-0 my_vol-client-1
+end-volume
+
+volume my_vol-write-behind
+    type performance/write-behind
+    subvolumes my_vol-dht
+end-volume
+
+volume my_vol-read-ahead
+    type performance/read-ahead
+    subvolumes my_vol-write-behind
+end-volume
+
+volume my_vol-io-cache
+    type performance/io-cache
+    subvolumes my_vol-read-ahead
+end-volume
+
+volume my_vol-quick-read
+    type performance/quick-read
+    subvolumes my_vol-io-cache
+end-volume
+
+volume my_vol-md-cache
+    type performance/md-cache
+    subvolumes my_vol-quick-read
+end-volume
+
+volume my_vol
+    type debug/io-stats
+    option latency-measurement off
+    option count-fop-hits off
+    subvolumes my_vol-md-cache
+end-volume&lt;/pre&gt;
+There is often a trusted version of the vol file located in the same directory. Below is an example of the additional information in protocol/client entry for the trusted variant.
+
+&lt;pre&gt;volume my_vol-client-0
+    type protocol/client
+    option remote-host 192.168.122.125
+    option remote-subvolume /glusterdata/brick125
+    option transport-type tcp
+    option username 79431724-6ea3-482f-8d2e-7654d8934d83
+    option password be6b8ca2-89fb-4223-b521-d976e3c5f6cd
+end-volume&lt;/pre&gt;
+=== Sample Server-side Vol File ===
+
+Used to configure each brick in the trusted storage pool. Files can be found in ` /var/lib/glusterd/vols/vol_name/` subdirectory
+
+&lt;pre&gt;volume my_vol-posix
+    type storage/posix
+    option directory /glusterdata/brick125
+    option volume-id 5e2d14d7-8352-46ca-8b7f-b965c277871f
+end-volume
+
+volume my_vol-access-control
+    type features/access-control
+    subvolumes my_vol-posix
+end-volume
+
+volume my_vol-locks
+    type features/locks
+    subvolumes my_vol-access-control
+end-volume
+
+volume my_vol-io-threads
+    type performance/io-threads
+    subvolumes my_vol-locks
+end-volume
+
+volume my_vol-index
+    type features/index
+    option index-base /glusterdata/brick125/.glusterfs/indices
+    subvolumes my_vol-io-threads
+end-volume
+
+volume my_vol-marker
+    type features/marker
+    option volume-uuid 5e2d14d7-8352-46ca-8b7f-b965c277871f
+    option timestamp-file /var/lib/glusterd/vols/my_vol/marker.tstamp
+    option xtime off
+    option quota off
+    subvolumes my_vol-index
+end-volume
+
+volume /glusterdata/brick125
+    type debug/io-stats
+    option latency-measurement off
+    option count-fop-hits off
+subvolumes my_vol-marker
+end-volume
+
+volume my_vol-server
+    type protocol/server
+    option transport-type tcp
+    option auth.login./glusterdata/brick125.allow 79431724-6ea3-482f-8d2e-7654d8934d83
+    option auth.login.79431724-6ea3-482f-8d2e-7654d8934d83.password be6b8ca2-89fb-4223-b521-d976e3c5f6cd
+    option auth.addr./glusterdata/brick125.allow *
+    subvolumes /glusterdata/brick125
+end-volume&lt;/pre&gt;
+=== Brick file ===
+
+Additional information on each brick can be found in &lt;code&gt;/var/lib/glusterd/vols/vol_name/bricks&lt;/code&gt; subdirectory
+
+&lt;pre&gt;hostname=192.168.122.125
+path=/glusterdata/brick125
+listen-port=24010
+rdma.listen-port=0
+decommissioned=0&lt;/pre&gt;
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

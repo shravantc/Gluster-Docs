@@ -1,0 +1,68 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Extend GlusterFS As A Developer</title>
+    <ns>0</ns>
+    <id>75</id>
+      <sha1>0q4jd8pssdz11up48wlp2xn2eqkc4zn</sha1>
+    <revision>
+      <id>461</id>
+      <timestamp>2015-03-10T07:27:25Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="1652">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+If you're interested in extending GlusterFS, learning about it's architecture or participating in the developer workflow, you'll want to read this:
+
+
+*[http://www.gluster.org/community/documentation/index.php/Planning35 GlusterFS 3.5 Release Planning] - Discuss planning the 3.5 release.
+*[http://www.gluster.org/community/documentation/index.php/Features Features in Development] - submit feedback on proposed features, or add your own.
+*[http://www.gluster.org/community/documentation/index.php/Backport_Wishlist Backport Wishlist] - bugs fixed in master you would like to see backported to a previous release branch
+*[http://www.gluster.org/community/documentation/index.php/Backport_Guidelines Backport Guidelines]- Guidelines for backporting patches/changes to a stable branch
+*[http://www.gluster.org/community/documentation/index.php/Projects Projects] - projects that can be worked on.
+*[http://www.gluster.org/community/documentation/index.php/Language_Bindings Language Bindings] - Connect to GlusterFS from programs written in languages other than C using these libgfapi bindings.
+*[http://www.gluster.org/community/documentation/index.php/Fixing_Issues_Reported_By_Tools_For_Static_Code_Analysis Fixing Issues Reported By Tools For Static Code Analysis] - This is good a starting point for developers to get involved with GlusterFS project.
+*[http://www.gluster.org/community/documentation/index.php/EasyFix_Bugs EasyFix Bugs] - EasyFix bugs for GlusterFS.
+
+
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

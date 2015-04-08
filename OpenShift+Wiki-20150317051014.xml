@@ -1,0 +1,139 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Gluster new user docs</title>
+    <ns>0</ns>
+    <id>28</id>
+      <sha1>qy93vs4u3sxip1ypd3zy8hxz2l7cyg1</sha1>
+    <revision>
+      <id>279</id>
+      <timestamp>2015-02-23T07:12:41Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="3943">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+==GlusterFS Concepts==
+&lt;br /&gt;
+GlusterFS is a powerful network/cluster filesystem written in user space which uses [http://en.wikipedia.org/wiki/Filesystem_in_Userspace FUSE] to hook itself with VFS layer. GlusterFS takes a layered approach to the file system, where features are added/removed as per the requirement. Though GlusterFS is a File System, it uses already tried and tested disk file systems like ext3, ext4, xfs, etc. to store the data. It can easily scale up to petabytes of storage which is available to user under a single mount point.
+&lt;br /&gt;
+&lt;br /&gt;
+==Terms==
+
+'''Brick'''&lt;br /&gt;
+The brick is a storage filesystem that has been assigned to a volume.&lt;br /&gt;
+&lt;br /&gt;
+'''Client'''&lt;br /&gt;
+The machine which mounts a volume (this may also be the server).&lt;br /&gt;
+&lt;br /&gt;
+'''Server'''&lt;br /&gt;
+The machine (virtual or bare metal) which holds the actual filesystem in which data will bw stored.&lt;br /&gt;
+&lt;br /&gt;
+'''Subvolume'''&lt;br /&gt;
+A brick after being processor by atleast one translator.&lt;br /&gt;
+&lt;br /&gt;
+'''Volume'''&lt;br /&gt;
+The final share after it passes through all the translators.&lt;br /&gt;
+&lt;br /&gt;
+==Translators==
+A translator connects to one or more subvolumes, does something with them, and offers a subvolume connection. &lt;br /&gt;
+&lt;br /&gt;[[File:Translator.png]]
+&lt;br /&gt;
+&lt;br /&gt;
+The brick's first translator (or last, depending on what direction data is flowing) is the storage/posix translator that manages the direct filesystem interface for the rest of the translators. 
+&lt;br /&gt;
+&lt;br /&gt;
+[[File:First-translator.png]]
+&lt;br /&gt;
+&lt;br /&gt;
+The configuration of translators (since GlusterFS 3.1) is managed through the gluster command line interface (cli), so you don't ''need'' to know in what order to graph the translators together.
+
+All the translators hooked together to perform a function is called a graph. A complete brick graph might look like this:&lt;br /&gt;
+&lt;br /&gt;
+[[File:Graph.png]] 
+&lt;br /&gt;
+&lt;br /&gt;
+==Distribute==
+&lt;br /&gt;
+Distribute takes a list of subvolumes and distributes files across them, effectively making one single larger storage volume from a series of smaller ones.
+&lt;br /&gt;
+&lt;br /&gt;
+[[File:Distribute.png]]
+&lt;br /&gt;
+&lt;br /&gt;
+With 4 files
+&lt;br /&gt;
+&lt;br /&gt;
+*file1.txt
+*file2.txt
+*file3.txt
+*file4.txt
+&lt;br /&gt;
+&lt;br /&gt;
+Each file ''may'' (probably would) be written to a different server using the distribute translator. 
+&lt;br /&gt;
+&lt;br /&gt;
+file1.txt server3&lt;br /&gt;
+file2.txt server4&lt;br /&gt;
+file3.txt server1&lt;br /&gt;
+file4.txt server2&lt;br /&gt;
+&lt;br /&gt;
+The server that the files are written to is calculated by hashing the filename. If the filename changes, a pointer file is written to the server that the new hash code would point to, telling the distribute translator which server the file is actually on.
+
+
+===Plus and Minus===
+'''Disadvantages'''
+&lt;br /&gt;
+*If you lose a single server, you lose access to all the files that are hosted on that server. This is why distribute is typically graphed to the replicate translator. &lt;br /&gt;
+*If your file is larger than the subvolume, writing your file will fail. &lt;br /&gt;
+*If the file is not where the hash code calculates to, an extra lookup operation must be performed, adding slightly to latency. 
+&lt;br /&gt;
+'''Advantages'''
+&lt;br /&gt;
+*The more servers you add, the better this scales in terms of random file access. As long as clients aren't all retrieving the same file, their access should be spread pretty evenly across all the servers. &lt;br /&gt;
+*Increasing volume can be done by adding a new server. Adding servers can be done on-the-fly (Since 3.1.0). &lt;br /&gt;
+
+==Replicate==
+&lt;br /&gt;
+Replicate is used for providing redundancy to both storage and generally to availability. 
+&lt;br /&gt;
+
+==Stripe==
+&lt;br /&gt;
+Stripes data across bricks in the volume. For best results, you should use striped volumes only in high concurrency environments accessing very large files. 
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

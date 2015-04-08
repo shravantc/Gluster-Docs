@@ -1,0 +1,113 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Developers GlusterFS</title>
+    <ns>0</ns>
+    <id>95</id>
+      <sha1>gfurkrcmtd07zmde2jk8xu8jwebpqzi</sha1>
+    <revision>
+      <id>431</id>
+      <timestamp>2015-03-04T06:56:06Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   = Developers =  === From GlusterDocumentation ===  == Contributing to the Gluster community...&quot;</comment>
+      <text xml:space="preserve" bytes="5004">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+= Developers =
+
+=== From GlusterDocumentation ===
+
+== Contributing to the Gluster community ==
+
+Are you itching to send in patches and participate as a developer in the Gluster community? Here are a number of starting points for getting involved. We don't require a signed contributor license agreement or copyright assignment, but we do require a &amp;quot;signed-off-by&amp;quot; line on each code check-in.
+
+* [http://www.gluster.org/community/documentation/index.php/Simplified_dev_workflow Simplified Developer Workflow] - A simpler and faster intro to developing with GlusterFS, than the doc below.
+* [http://www.gluster.org/community/documentation/index.php/Development_Work_Flow Developer Workflow] - this tells you about our patch requirements, tools we use, and more. Required reading if you want to contribute code.
+* [http://www.gluster.org/2012/05/glusterfs-license-change/ License Change] - we recently changed the client library code to a dual license under the GPL v2 and the LGPL v3 or later
+
+== Compiling Gluster ==
+
+* [http://www.gluster.org/community/documentation/index.php/CompilingRPMS Compiling RPMS] - Step by step instructions for compiling Gluster RPMS
+* [http://www.gluster.org/community/documentation/index.php/Building_GlusterFS Building GlusterFS] - How to compile Gluster from source code. Including instructions for Ubuntu.
+
+== Developing ==
+
+* [http://www.gluster.org/community/documentation/index.php/Projects Projects] - Ideas for projects you could create
+* [http://www.gluster.org/community/documentation/index.php/Language_Bindings Language Bindings] - Connect to GlusterFS using various language bindings
+* [http://www.gluster.org/community/documentation/index.php/EasyFix_Bugs EasyFix_Bugs] - Easy to fix bugs of GlusterFS. One of the best place to start contributing to GlusterFS.
+* [http://www.gluster.org/community/documentation/index.php/Fixing_Issues_Reported_By_Tools_For_Static_Code_Analysis Fixing issues reported by tools for static code analysis] - This is a good starting point for developers to fix bugs in GlusterFS project.
+* [http://www.gluster.org/community/documentation/index.php/Backport_Wishlist Backport Wishlist] - Problems fixed in the master branch might need to get fixed in stable release branches too. The [http://www.gluster.org/community/documentation/index.php/Backport_Guidelines Backport Guidelines] describe the steps that are needed to provide patches.
+
+== Testing ==
+
+* [http://www.gluster.org/community/documentation/index.php/Using_the_Gluster_Test_Framework Using the Gluster Test Framework] - Step by step instructions for running the Gluster Test Framework
+* [http://www.gluster.org/community/documentation/index.php/Jenkins_Infrastructure Our Jenkins Infrastructure] - A braindump of the Jenkins infrastructure we have in place for automated testing
+* [http://www.gluster.org/community/documentation/index.php/Jenkins_setup Manual steps for setting up a Jenkins slave VM in Rackspace] - Steps for setting up a slave VM in Rackspace
+
+== Bug Handling ==
+
+* [http://www.gluster.org/community/documentation/index.php/Bug_reporting_guidelines Bug reporting guidelines] - Guideline for reporting a bug in GlusterFS
+* [http://www.gluster.org/community/documentation/index.php/Bug_triage Bug triage guidelines] - Guideline on how to triage bugs for GlusterFS
+* [http://www.gluster.org/community/documentation/index.php/Bug_report_life_cycle Bug report life cycle in Bugzilla] - Information about bug life cycle
+
+== Patch Acceptance ==
+
+* The [http://www.gluster.org/community/documentation/index.php/Guidelines_For_Maintainers Guidelines For Maintainers] explains when maintainers can merge patches.
+
+== Release Planning ==
+
+We recently convened to plan the 3.6 release, the results of which you'll find in the link below. This is, of course, subject to change.
+
+* [http://www.gluster.org/community/documentation/index.php/Features Features Under Development]
+* [http://www.gluster.org/community/documentation/index.php/Planning36 GlusterFS 3.6 Release Planning] - this is our evolving roadmap for GlusterFS 3.6
+
+== Release Process ==
+
+* [http://www.gluster.org/community/documentation/index.php/GlusterFS_Release_Process GlusterFS Release Process] - Our release process / checklist
+
+== Writing Translators ==
+
+Translators are the most powerful way to extend GlusterFS. These stackable modules allow developers to easily add - or remove - features as they see fit. GlusterFS is, at its core, a toolkit for building new filesystems, with translators being the building blocks.
+
+* [http://www.gluster.org/community/documentation/index.php/Arch Architectural overview and Gluster internals]
+* [http://www.gluster.org/community/documentation/index.php/Translators All about translators] - including links to tutorials and current list of translator maintainers
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

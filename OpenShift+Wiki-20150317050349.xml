@@ -1,0 +1,95 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Admin Start Stop Daemon</title>
+    <ns>0</ns>
+    <id>68</id>
+      <sha1>2ykkhtpwkmeamjmo5nhvi149e7iiqeh</sha1>
+    <revision>
+      <id>347</id>
+      <timestamp>2015-02-26T09:23:26Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = Managing the glusterd Service =  After installing GlusterFS, you must start glusterd servi...&quot;</comment>
+      <text xml:space="preserve" bytes="2090">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= Managing the glusterd Service =
+
+After installing GlusterFS, you must start glusterd service. The glusterd service serves as the Gluster elastic volume manager, overseeing glusterfs processes, and co-ordinating dynamic volume operations, such as adding and removing volumes across multiple storage servers non-disruptively.
+
+This section describes how to start the glusterd service in the following ways:
+
+* [[#manual|Starting and Stopping glusterd Manually]]
+* [[#auto|Starting glusterd Automatically]]
+
+&lt;blockquote&gt;'''Note''': You must start glusterd on all GlusterFS servers.
+&lt;/blockquote&gt;
+&lt;a name=&quot;manual&quot; /&gt; ##Starting and Stopping glusterd Manually
+
+This section describes how to start and stop glusterd manually
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;To start glusterd manually, enter the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# /etc/init.d/glusterd start&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;To stop glusterd manually, enter the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# /etc/init.d/glusterd stop&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;a name=&quot;auto&quot; /&gt; ##Starting glusterd Automatically
+
+This section describes how to configure the system to automatically start the glusterd service every time the system boots.
+
+=== Red Hat and Fedora distros ===
+
+To configure Red Hat-based systems to automatically start the glusterd service every time the system boots, enter the following from the command line:
+
+&lt;code&gt;# chkconfig glusterd on&lt;/code&gt;
+
+=== Debian and derivatives like Ubuntu ===
+
+To configure Debian-based systems to automatically start the glusterd service every time the system boots, enter the following from the command line:
+
+&lt;code&gt;# update-rc.d glusterd defaults&lt;/code&gt;
+
+=== Systems Other than Red Hat and Debain ===
+
+To configure systems other than Red Hat or Debian to automatically start the glusterd service every time the system boots, enter the following entry to the''/etc/rc.local'' file:
+
+&lt;code&gt;# echo &amp;quot;glusterd&amp;quot; &amp;gt;&amp;gt; /etc/rc.local&lt;/code&gt;
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

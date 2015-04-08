@@ -1,0 +1,113 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Concise HowTo</title>
+    <ns>0</ns>
+    <id>90</id>
+      <sha1>9g7x2vt4tuwr47noxn96mqnybb21c0s</sha1>
+    <revision>
+      <id>419</id>
+      <timestamp>2015-03-04T06:07:16Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   = HowTo =  === From GlusterDocumentation ===  This page contains guides for doing stuff wit...&quot;</comment>
+      <text xml:space="preserve" bytes="4062">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+= HowTo =
+
+=== From GlusterDocumentation ===
+
+This page contains guides for doing stuff with GlusterFS.
+
+==== Finished Articles ====
+
+* [http://www.gluster.org/community/documentation/index.php/GlusterOnZFS GlusterFS On ZFS]
+* [http://www.gluster.org/community/documentation/index.php/CTDB CTDB HOWTO]
+* [http://download.gluster.org/pub/gluster/glusterfs/doc/HA%20and%20Load%20Balancing%20for%20NFS%20and%20SMB.html HA and Load Balancing with NFS and SMB]
+* [http://www.gluster.org/community/documentation/index.php/CompilingRPMS Creating Gluster RPMS] - How to compile GlusterFS RPMs from git source, for RHEL/CentOS 6.4 and Fedora 16-18
+* [http://www.gluster.org/community/documentation/index.php/GlusterFS_Keystone_Quickstart GlusterFS Keystone Quickstart]
+* [http://www.gluster.org/community/documentation/index.php/GlusterFS_Cinder GlusterFS Cinder] - Setup instructions for using GlusterFS with OpenStack Grizzly's block service (Cinder)
+* [http://www.gluster.org/community/documentation/index.php/GlusterFS_iSCSI GlusterFS iSCSI] - Setup instructions for using GlusterFS as a block storage system with an iSCSI interface
+* [http://www.gluster.org/community/documentation/index.php/Adding_space_in_EC2_with_EBS Adding space in EC2 with EBS] - A simple procedure to expand the size of your EBS-backed GlusterFS volume.
+
+===== Tips and Tricks =====
+
+* [http://www.gluster.org/community/documentation/index.php/Network_Bonding Network Configuration Techniques]
+* [http://www.gluster.org/community/documentation/index.php/HowTos:Brick_naming_conventions Brick naming conventions]
+* [http://www.gluster.org/community/documentation/index.php/Using_Gluster_with_OSX Using Gluster with OSX] - Tips for connecting to GlusterFS volumes with OSX
+* [http://www.gluster.org/community/documentation/index.php/Linux_Kernel_Tuning Linux Kernel Tuning] - Need to get in the nitty gritty for kernel tuning parameters? This is the article for you
+* [http://www.gluster.org/community/documentation/index.php/Glusterfs-filter Glusterfs-filter] - Modyfing .vol files directly with a filter.
+* [http://www.gluster.org/community/documentation/index.php/Using_the_Gluster_Test_Framework Using the Gluster Test Framework] - How to get started with the GlusterFS Test Framework
+* [http://www.gluster.org/community/documentation/index.php/Building_QEMU_with_gfapi_for_Debian_based_systems Building QEMU with gfapi for Debian based systems]
+* [http://www.gluster.org/community/documentation/index.php/Performance_Testing Performance Testing] - DRAFT - how to test Gluster performance with typical multi-client, multi-stream workloads.
+
+===== Troubleshooting =====
+
+* [http://joejulian.name/blog/glusterfs-path-or-a-prefix-of-it-is-already-part-of-a-volume/ Disk already used in a volume]
+* [https://gist.github.com/4392640 Resolve GFID to filename]
+* [http://www.gluster.org/community/documentation/index.php/Resolving_Peer_Rejected Resolving Peer Rejected]
+* [http://www.gluster.org/community/documentation/index.php/Gluster_3.4:_Brick_Restoration_-_Replace_Crashed_Server Gluster 3.4: Brick Restoration - Replace Crashed Server]
+
+==== Articles that need to be written ====
+
+===== Troubleshooting =====
+
+* UUID's and cloning Gluster instances
+* Verifying cluster integrity
+
+===== Configuration =====
+
+remaining topics:
+
+* using cgroups to manage Gluster behaviour under different workloads
+* CTDB configuration for failover of non-native protocols (SMB/NFS)
+* [http://www.gluster.org/community/documentation/index.php?title=DebianPackagePatching&amp;action=edit&amp;redlink=1 Patching Debian/Ubuntu Packages]
+
+===== Tips and Tricks =====
+
+* Running commands on multiple servers
+* Which filesystem should I format the Gluster bricks with? - this is easy: XFS. Ext4 considered harmful.
+
+===== Analytics =====
+
+* [http://www.gluster.org/community/documentation/index.php/Hadoop Running GlusterFS on top of Hadoop]
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

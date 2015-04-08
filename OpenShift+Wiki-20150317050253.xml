@@ -1,0 +1,106 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Admin Object Storage</title>
+    <ns>0</ns>
+    <id>62</id>
+      <sha1>h6pipvyq8gmost7w9aix266f0zxl14r</sha1>
+    <revision>
+      <id>341</id>
+      <timestamp>2015-02-26T09:18:29Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = SwiftOnFile =  SwiftOnFile project enables GlusterFS volume to be used as backend for Open...&quot;</comment>
+      <text xml:space="preserve" bytes="5270">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= SwiftOnFile =
+
+SwiftOnFile project enables GlusterFS volume to be used as backend for Openstack Swift - a distributed object store. This allows objects PUT over Swift's RESTful API to be accessed as files over filesystem interface and vice versa i.e files created over filesystem interface (NFS/FUSE/native) can be accessed as objects over Swift's RESTful API.
+
+SwiftOnFile project was formerly known as &lt;code&gt;gluster-swift&lt;/code&gt; and also as &lt;code&gt;UFO (Unified File and Object)&lt;/code&gt; before that. More information about SwiftOnFile can be found [https://github.com/swiftonfile/swiftonfile/blob/master/doc/markdown/quick_start_guide.md here]. There are differences in working of gluster-swift (now obsolete) and swiftonfile projects. The older gluster-swift code and relevant documentation can be found in [https://github.com/swiftonfile/swiftonfile/tree/icehouse icehouse branch] of swiftonfile repo.
+
+== SwiftOnFile vs gluster-swift ==
+
+{|
+!align=&quot;center&quot;|Gluster-Swift
+!align=&quot;center&quot;|SwiftOnFile
+|-
+|align=&quot;center&quot;|One GlusterFS volume maps to and stores only one Swift account. Mountpoint Hierarchy: &lt;code&gt;container/object&lt;/code&gt;
+|align=&quot;center&quot;|One GlusterFS volume or XFS partition can have multiple accounts. Mountpoint Hierarchy: &lt;code&gt;acc/container/object&lt;/code&gt;
+|-
+|align=&quot;center&quot;|Over-rides account server, container server and object server. We need to keep in sync with upstream Swift and often may need code changes or workarounds to support new Swift features
+|align=&quot;center&quot;|Implements only object-server. Very less need to catch-up to Swift as new features at proxy,container and account level would very likely be compatible with SwiftOnFile as it's just a storage policy.
+|-
+|align=&quot;center&quot;|Does not use DBs for accounts and container.A container listing involves a filesystem crawl.A HEAD on account/container gives inaccurate or stale results without FS crawl.
+|align=&quot;center&quot;|Uses Swift's DBs to store account and container information. An account or container listing does not involve FS crawl. Accurate info on HEAD to account/container – ability to support account quotas.
+|-
+|align=&quot;center&quot;|GET on a container and account lists actual files in filesystem.
+|align=&quot;center&quot;|GET on a container and account only lists objects PUT over Swift. Files created over filesystem interface do not appear in container and object listings.
+|-
+|align=&quot;center&quot;|Standalone deployment required and does not integrate with existing Swift cluster.
+|align=&quot;center&quot;|Integrates with any existing Swift deployment as a Storage Policy.
+|}= SwiftOnFile =
+
+SwiftOnFile project enables GlusterFS volume to be used as backend for Openstack Swift - a distributed object store. This allows objects PUT over Swift's RESTful API to be accessed as files over filesystem interface and vice versa i.e files created over filesystem interface (NFS/FUSE/native) can be accessed as objects over Swift's RESTful API.
+
+SwiftOnFile project was formerly known as &lt;code&gt;gluster-swift&lt;/code&gt; and also as &lt;code&gt;UFO (Unified File and Object)&lt;/code&gt; before that. More information about SwiftOnFile can be found [https://github.com/swiftonfile/swiftonfile/blob/master/doc/markdown/quick_start_guide.md here]. There are differences in working of gluster-swift (now obsolete) and swiftonfile projects. The older gluster-swift code and relevant documentation can be found in [https://github.com/swiftonfile/swiftonfile/tree/icehouse icehouse branch] of swiftonfile repo.
+
+== SwiftOnFile vs gluster-swift ==
+
+{|
+!align=&quot;center&quot;|Gluster-Swift
+!align=&quot;center&quot;|SwiftOnFile
+|-
+|align=&quot;center&quot;|One GlusterFS volume maps to and stores only one Swift account. Mountpoint Hierarchy: &lt;code&gt;container/object&lt;/code&gt;
+|align=&quot;center&quot;|One GlusterFS volume or XFS partition can have multiple accounts. Mountpoint Hierarchy: &lt;code&gt;acc/container/object&lt;/code&gt;
+|-
+|align=&quot;center&quot;|Over-rides account server, container server and object server. We need to keep in sync with upstream Swift and often may need code changes or workarounds to support new Swift features
+|align=&quot;center&quot;|Implements only object-server. Very less need to catch-up to Swift as new features at proxy,container and account level would very likely be compatible with SwiftOnFile as it's just a storage policy.
+|-
+|align=&quot;center&quot;|Does not use DBs for accounts and container.A container listing involves a filesystem crawl.A HEAD on account/container gives inaccurate or stale results without FS crawl.
+|align=&quot;center&quot;|Uses Swift's DBs to store account and container information. An account or container listing does not involve FS crawl. Accurate info on HEAD to account/container – ability to support account quotas.
+|-
+|align=&quot;center&quot;|GET on a container and account lists actual files in filesystem.
+|align=&quot;center&quot;|GET on a container and account only lists objects PUT over Swift. Files created over filesystem interface do not appear in container and object listings.
+|-
+|align=&quot;center&quot;|Standalone deployment required and does not integrate with existing Swift cluster.
+|align=&quot;center&quot;|Integrates with any existing Swift deployment as a Storage Policy.
+|}
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,114 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Geo Replication</title>
+    <ns>0</ns>
+    <id>102</id>
+      <sha1>q61kvu5vwurql8hjfbtroxx76vyti7c</sha1>
+    <revision>
+      <id>460</id>
+      <timestamp>2015-03-06T06:27:23Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   == Arch/GeoRep Prior Work ==  == Current GeoRep ==  Glusterfs GepRep consists on a pair of ...&quot;</comment>
+      <text xml:space="preserve" bytes="5988">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+== Arch/GeoRep Prior Work ==
+
+== Current GeoRep ==
+
+Glusterfs GepRep consists on a pair of replication processes per volume, one hosted on a node in the Master Cluster and other hosted on a node with the Slave Cluster, responsible for propagating changes from the master volume to the slave volume. Conceptually the GeoRep Master process can be thought of as consisting of a &amp;quot;Producer&amp;quot; component, responsible for detecting changed files, and a &amp;quot;Consumer Component&amp;quot; responsible for propagating contents of the changed files to the remote Slave cluster.
+
+Depending on the configuration of the filesystem (small files vs large files, random changes vs localized changes, small vs large numbers of files/directory), either the producer or consumer side can become a performance bottleneck. For many pathological workloads, it the the producer side that has been the root cause of performance issues (low bandwidth due to starved consumer pipeline). Additionally, the single process per cluster structure means that the NIC bandwidth of the node hosting replication process can become a bottleneck since replication bandwidth does not scale with overall cluster nodes/cluster capacity.
+
+# Producer Side
+# Directory Hierarchy Crawl - This is the top-level producer side process that walks the directory hierarchy leveraging the marker framework to identify directory sub-trees that contained changed data relative to a specific point in time, based on the directory x-time. Directory trees containing x-time timestamps earlier than comparison value are pruned from the crawl. Directories marked with recent changes are passed onto the the directory scan process.
+# Directory Scan and Change Detection.
+# Inventory: The first step is to gather an inventory of directory entries, including x-time values for each directory entry, on both the Master and Slave sides.
+# Master/Slave Comparison: The directories are compared to identify differences. Key differences include a) deleted files (files present on slave, but not master) and b) renamed file (appears as new file&lt;br /&gt; deleted file on master).
+# Consumer Side - Rsync over SSH is used as the primary file transfer mechanism. RSync is given a specific list of changed files to be replicated, rather than having Rsync perform scanning of directory
+
+== X-Sync Prototype ==
+
+X-Sync was developed as a temporary short-term alternative to GeoRep for certain performance intensive use-cases. The current version of x-sync can be found on [https://github.com/avati/xsync | Git Hub]
+
+Overall approach:
+
+* Replication operation is distributed across all cluster nodes by implementing a logical partition, then assigning a per-node replication process for each partition
+** Partition is primarily based on brick structure, where each node is responsible for replicating data stored on a local brick. This enables each replication process to directly query local brick filesystem.
+** In instances where there are a set of replicated bricks (AFR), GepRep responsibility distributed among replica servers using a hash based on directory name. Nodes are only responsible for replicating directories corresponding to the directory hash — directory selected if hash(dir_name)%replica_count == index).
+* Within each partition, x-time is used to prune directory crawl. Candidate directories are inserted into a queue
+* Each node as a tunable number of scanner worker processes.
+** Each scanner process collects a set of directory entries from the candidate queue.
+** Each directory is the volume’s global namespace is mapped to a corrresponding directory within the brick’s XFS local filesystem.
+** A read dir is performed against the brick local filesystem to list the set of files per directory and associated inodes
+** The set of files is sorted in inode order. Note: this sorting by local filesystem inode improves the likelyhiid of spacial locality when the inodes are read in the next step.
+** Stat operations are performed on each inode in the sorted inode list, and the file list is pruned based on timestamp. (note: check with Avati on whether there are other pruning operations, such as for link-to files, that take place at this step.
+** The pruned file list is further verified via stat operation through the Gluster global volume view
+* Each scanner worker process feeds a list of changed files to a corresponding copy worker process. This copy routine is pluggable via command line
+** The current version of uses tar-untar over SSH to perform copy
+* Associated with each directory for each brick is a director timestamp file. This file lists both the starting and ending x-time for the most recent copy operation. This information is used by x-sync during error recovery to determine intermediate progress.
+
+=== X-Sync Limitations ===
+
+* X-Sync does not detect file or directory deletes
+* While X-Sync implements high performance directory scans, all entries within a directory must be examined for timestamp. Implications:
+** Scan time grows with directory size
+** Potential for high IO loads use to accessing of file inodes on-disk.
+* X-Sync does not detect changes where file write via GFID
+* X-SYnc does not currently automatically relocate Master-side replication process to other alternative master-side nodes on master-side node failure. Relocation is currently a manual reconfiguration process (planned enhancement)
+* RPM packaging may conflicts with traditional GeoRep. Care needed in updating nodes.
+
+== Performance Implications of Various File Copy Mechanisms ==
+
+Includes:
+
+* RSync over SSH
+* Tar/Untar over SSH
+
+Note: Known performance limitations with SSH. May need to drive performance enhancements.
+
+See: [http://www.psc.edu/index.php/hpn-ssh | High Performance SSH at PSC]
+
+Copyright ©
+
+Gluster, Inc. All Rights Reserved.
+
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

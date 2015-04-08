@@ -1,0 +1,74 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS Administration Guide</title>
+    <ns>0</ns>
+    <id>34</id>
+      <sha1>tmzgumd5myzslutxpwkb4d3dq3cj94h</sha1>
+    <revision>
+      <id>355</id>
+      <timestamp>2015-02-26T09:29:43Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="795">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+[[GFS Introduction]]&lt;br /&gt;
+[[Admin ACLs]] &lt;br /&gt;
+[[Admin Console]]&lt;br /&gt;
+[[Admin Directory Quota]]&lt;br /&gt;
+[[Admin Distributed Geo Rep]]&lt;br /&gt;
+[[Admin Geo Replication]]&lt;br /&gt;
+[[Admin Hadoop]]&lt;br /&gt;
+[[Admin Managing Snapshots]]&lt;br /&gt;
+[[Admin Managing Volumes]]&lt;br /&gt;
+[[Admin Monitoring Workload]]&lt;br /&gt;
+[[Admin Object Storage]]&lt;br /&gt;
+[[Admin Puppet]]&lt;br /&gt;
+[[Admin RDMA Transport]]&lt;br /&gt;
+[[Admin Setting Up Clients]]&lt;br /&gt;
+[[Admin setting Volumes]]&lt;br /&gt;
+[[Admin SSL]]&lt;br /&gt;
+[[Admin Start Stop Daemon]]&lt;br /&gt;
+[[Admin Storage Pools]]&lt;br /&gt;
+[[Admin troubleshooting guide]]&lt;br /&gt;
+[[Did You Know]]&lt;br /&gt;
+[[Glossary]]&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

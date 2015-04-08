@@ -1,0 +1,83 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Operating Versions</title>
+    <ns>0</ns>
+    <id>92</id>
+      <sha1>f8zh1lk7eaaa11hnkv3603liwypc998</sha1>
+    <revision>
+      <id>428</id>
+      <timestamp>2015-03-04T06:44:31Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="1878">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= OperatingVersions =
+
+=== From GlusterDocumentation ===
+
+Table of GlusterFS Operating Versions, and the release of GlusterFS they correspond to, as used in the operating-version= field in the glusterd.info file.
+
+If you update/change/add the values in GlusterFS, please update this table, and also send a patch to Puppet-Gluster, or ping @purpleidea. It is an easy 4 line yaml patch to add new operating versions in.
+
+Eg:
+
+[https://github.com/purpleidea/puppet-gluster/commit/43c60d2ddd6f57d2117585dc149de6653bdabd4b#diff-7cb3f60a533975d869ffd4a772d66cfeR1 https://github.com/purpleidea/puppet-gluster/commit/43c60d2ddd6f57d2117585dc149de6653bdabd4b#diff-7cb3f60a533975d869ffd4a772d66cfeR1]
+
+{| class=&quot;wikitable&quot;
+&lt;br /&gt;
+!'''GlusterFS Version'''!!'''Operating Version'''
+|- style=&quot;vertical align:middle;&quot;
+|3.3||1
+|- style=&quot;vertical align:middle;&quot;
+|3.4.x||2
+|- style=&quot;vertical align:middle;&quot;
+|3.5.0||3
+|- style=&quot;vertical align:middle;&quot;
+|3.5.1||30501
+|- style=&quot;vertical align:middle;&quot;
+|3.6.0||30600
+|}
+
+&lt;br /&gt; Till 3.5.0, the op-version was an incrementing integer that was incremented by 1 for every Y release (when using the X.Y.Z release numbering). This is not flexible enough to handle backports of features into Z releases.
+
+Going forward, from the upcoming 3.6.0 release, the op-versions will be multi-digit integer values composed of the version numbers, instead of a simple incrementing integer. An X.Y.Z release will have XYZ as its op-version. Y and Z will always be 2 digits wide and will be padded with 0 if required. This way of bumping op-versions allows for gaps in between the subsequent Y releases. These gaps will allow backporting features from new Y releases into old Z releases.
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,95 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS Networking Performance</title>
+    <ns>0</ns>
+    <id>87</id>
+      <sha1>6nk46xn80vd9pfjndi49udq4zjn4pwq</sha1>
+    <revision>
+      <id>408</id>
+      <timestamp>2015-03-02T10:32:19Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  == Networking Performance ==  Before testing the disk and file system, it’s a good idea to...&quot;</comment>
+      <text xml:space="preserve" bytes="4396">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+== Networking Performance ==
+
+Before testing the disk and file system, it’s a good idea to make sure that the network connection between the GlusterFS nodes is performing as you would expect. Test the network bandwidth between all GlusterFS boxes using Iperf. See the [http://www.jamescoyle.net/how-to/574-testing-network-speed-with-iperf Iperf blog post] for more information on benchmarking network performance. Remember to test the performance over a period of several hours to minimise the affect of host and network load. If you make any network changes, remember to test between each change to make sure it has had the desired effect.
+
+There are a few tools available to measure network performance metrics such as throughput, packet loss and jitter (sometimes known as delay variation). One of these tools is called iperf.
+
+=== iperf ===
+
+iperf is a tool for active measurements of the maximum achievable bandwidth on IP networks. It supports tuning of various parameters related to timing, protocols, and buffers. For each test it reports the bandwidth, loss, and other parameters.
+
+iperf3 is a new implementation from scratch, with the goal of a smaller, simpler code base, and a library version of the functionality that can be used in other programs. iperf3 also a number of features found in other tools such as nuttcp and netperf, but were missing from the original iperf. These include, for example, a zero-copy mode and optional JSON output.
+
+The basics of using iperf are simple. Install it on a server and a client, then run &lt;code&gt;iperf -s&lt;/code&gt; on the server and &lt;code&gt;iperf -c &amp;lt;IP address of server&amp;gt;&lt;/code&gt; on the client. The -s option signifies server, whilst the -c option indicates client. You need to specify the IP address of the server to connect to with the -c option. Running iperf with -h prints out the options. The -i option defines the interval in seconds that iperf reports the metrics. The default time that the iperf client will run is 10 seconds, but this can be changed using the -t option. By default, the iperf server listens on port 5001, but this can be changed if required.
+
+=== Installing iperf3 ===
+
+Github repo here: https://github.com/esnet/iperf
+
+To check out the most recent code, do &lt;code&gt;git clone https://github.com/esnet/iperf.git&lt;/code&gt;
+
+&lt;pre&gt;./configure
+make
+make install&lt;/pre&gt;
+(Note: If configure fails, try running ./bootstrap.sh first)
+
+Once installed, on the remote host run iperf3 in client mode. If you wish to run the server in daemon mode, add -D to the command.
+
+&lt;pre&gt;iperf3 -s -i 1&lt;/pre&gt;
+iperf has many configurable options for testing network throughput. For our test, we will use TCP connections to a remote server at &lt;IP address of server&gt;. The test will use 4 threads, each sending data and the test will be performed in both directions.
+
+&lt;pre&gt;iperf3 -c &amp;lt;IP address of server&amp;gt; -i 1 -t 60&lt;/pre&gt;
+== Filesystem IO Performance ==
+
+Once you have tested the network between all GlusterFS boxes, you should test the local disk speed on each machine. There are several ways to do this, but I find it’s best to keep it simple and use one of two options; DD or bonnie++. You must be sure to turn off any GlusterFS replication as it is just the disks and filesystem which we are trying to test here. [http://www.coker.com.au/bonnie++/ Bonnie++] is a freely available IO benchmarking tool. DD is a linux command line tool which can replicate data streams and copy files. See [http://www.jamescoyle.net/how-to/599-benchmark-disk-io-with-dd-and-bonnie this blog post] for information on benchmarking the files system.
+
+== Technology, Tuning and GlusterFS ==
+
+Once we have made it certain in our minds that disk I/O and network bandwidth are not the issue, or more importantly understood what constraints they give you in your environment, you can tune everything else to maximize performance. In our case, we are trying to maximize GlusterFS replication performance over two nodes.
+
+We can aim to achieve replication speeds nearing the speed of the the slowest performing speed; file system IO and network speeds.
+
+See [http://www.jamescoyle.net/how-to/559-glusterfs-performance-tuning%20%E2%80%8E this blog post on GlusterFS performance tuning].
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,182 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Backport Wishlist</title>
+    <ns>0</ns>
+    <id>93</id>
+      <sha1>i9bwabu3zuzwg8ta5z2qcijiay77qfg</sha1>
+    <revision>
+      <id>426</id>
+      <timestamp>2015-03-04T06:26:30Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   = Backport Wishlist =  === From GlusterDocumentation ===  Bugs often get fixed in master be...&quot;</comment>
+      <text xml:space="preserve" bytes="8775">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+= Backport Wishlist =
+
+=== From GlusterDocumentation ===
+
+Bugs often get fixed in master before release branches.
+
+When a bug is fixed in the master branch it might be desirable or necessary to backport the fix to a stable branch.
+
+This page is intended to help organize support (and prioritization) for backporting bug fixes of importance to the community.
+
+=== GlusterFs 3.6 ===
+
+== Requested Backports for 3.6.0 ==
+
+The tracker bug for 3.6.0 : [https://bugzilla.redhat.com/show_bug.cgi?id=glusterfs-3.6.0 https://bugzilla.redhat.com/show_bug.cgi?id=glusterfs-3.6.0]
+
+&lt;br /&gt; Please add 'glusterfs-3.6.0' in the 'Blocks' field of bugs to propose inclusion in GlusterFS 3.6.0.
+
+&lt;br /&gt;
+
+=== GlusterFs 3.5 ===
+
+== Requested Backports for 3.5.3 ==
+
+Current [https://bugzilla.redhat.com/showdependencytree.cgi?hide_resolved=0&amp;id=glusterfs-3.5.3 list of bugs planned for inclusion].
+
+* File a new bug for backporting a patch to 3.5.3: [https://bugzilla.redhat.com/enter_bug.cgi?product=GlusterFS&amp;blocked=glusterfs-3.5.3&amp;version=3.5.2&amp;short_desc=backport%20request%20for%20... new glusterfs-3.5.3 backport request]
+
+&lt;br /&gt;
+
+=== GlusterFs 3.4 ===
+
+== Requested Backports for 3.4.6 ==
+
+The tracker bug for 3.4.6 : [https://bugzilla.redhat.com/show_bug.cgi?id=glusterfs-3.4.6 https://bugzilla.redhat.com/show_bug.cgi?id=glusterfs-3.4.6]
+
+&lt;br /&gt; Please add 'glusterfs-3.4.6' in the 'Blocks' field of bugs to propose inclusion in GlusterFS 3.4.6.
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1116150 https://bugzilla.redhat.com:443/show_bug.cgi?id=1116150] [https://bugzilla.redhat.com/show_bug.cgi?id=1117851 https://bugzilla.redhat.com:443/show_bug.cgi?id=1117851]
+
+== Requested Backports for 3.4.4 ==
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=859581 https://bugzilla.redhat.com/show_bug.cgi?id=859581] - &amp;quot;self-heal process can sometimes create directories instead of symlinks for the root gfid file in .glusterfs&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1041109 https://bugzilla.redhat.com/show_bug.cgi?id=1041109] - &amp;quot;structure needs cleaning&amp;quot; message appear when accessing files.
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1073023 https://bugzilla.redhat.com/show_bug.cgi?id=1073023] - glusterfs mount crash after remove brick, detach peer and termination
+
+== Requested Backports for 3.4.3 ==
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=859581 https://bugzilla.redhat.com/show_bug.cgi?id=859581] - &amp;quot;self-heal process can sometimes create directories instead of symlinks for the root gfid file in .glusterfs&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1041109 https://bugzilla.redhat.com/show_bug.cgi?id=1041109] - &amp;quot;structure needs cleaning&amp;quot; message appear when accessing files.
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=977492 https://bugzilla.redhat.com/show_bug.cgi?id=977492] - large NFS writes to Gluster slow down then stop
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1073023 https://bugzilla.redhat.com/show_bug.cgi?id=1073023] - glusterfs mount crash after remove brick, detach peer and termination
+
+== Requested Backports for 3.3.3 ==
+
+[https://bugzilla.redhat.com/1058666 Enable fusermount by default, make nightly autobuilding work]
+
+== Requested Backports for 3.4.2 ==
+
+Please enter bugzilla ID or patch URL here:
+
+1) Until RDMA handling is improved, we should output a warning when using RDMA volumes - [https://bugzilla.redhat.com/show_bug.cgi?id=1017176 https://bugzilla.redhat.com/show_bug.cgi?id=1017176]
+
+2) Unable to shrink volumes without dataloss - [https://bugzilla.redhat.com/show_bug.cgi?id=1024369 https://bugzilla.redhat.com/show_bug.cgi?id=1024369]
+
+3) cluster/dht: Allow non-local clients to function with nufa volumes. - [http://review.gluster.org/5414 http://review.gluster.org/5414]
+
+== Requested Backports for 3.4.1 ==
+
+Please enter bugzilla ID or patch URL here.
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=812230 https://bugzilla.redhat.com/show_bug.cgi?id=812230] - &amp;quot;quota context not set in inode&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=893778 https://bugzilla.redhat.com/show_bug.cgi?id=893778] - &amp;quot;NFS crash bug&amp;quot;
+
+A note for whoever reviews this list: These are the fixes for issues that have caused actual service disruption in our production installation and thus are absolutely required for us (-- Lubomir Rintel):
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=994392 https://bugzilla.redhat.com/show_bug.cgi?id=994392] - &amp;quot;Setting ACL entries fails with glusterfs-3.4.0&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=991622 https://bugzilla.redhat.com/show_bug.cgi?id=991622] - &amp;quot;fd leaks observed while running dbench with &amp;quot;open-behind&amp;quot; volume option set to &amp;quot;on&amp;quot; on a replicate volume&amp;quot;
+
+These are issues that we've stumbled upon during the git log review and that seemed scary enough for us to cherry-pick them to avoid risk, despite not being actually hit. Hope that helps deciding whether it's worthwhile cherry-picking them (-- Lubomir Rintel):
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=961691 https://bugzilla.redhat.com/show_bug.cgi?id=961691] &amp;quot;CLI crash upon executing &amp;quot;gluster peer status&amp;quot; command&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=965995 https://bugzilla.redhat.com/show_bug.cgi?id=965995] &amp;quot;quick-read and open-behind xlator: Make options (volume_options ) structure NULL terminated.&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=958691 https://bugzilla.redhat.com/show_bug.cgi?id=958691] &amp;quot;nfs-root-squash: rename creates a file on a file residing inside a sticky bit set directory&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=982919 https://bugzilla.redhat.com/show_bug.cgi?id=982919] &amp;quot;DHT : files are stored on directory which doesn't have hash range(hash layout)&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=976189 https://bugzilla.redhat.com/show_bug.cgi?id=976189] &amp;quot;statedump crashes in ioc_inode_dump&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=982174 https://bugzilla.redhat.com/show_bug.cgi?id=982174] &amp;quot;cli crashes when setting diagnostics.client-log-level is set to trace&amp;quot;
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=989579 https://bugzilla.redhat.com/show_bug.cgi?id=989579] &amp;quot;glusterfsd crashes on smallfile benchmark&amp;quot;
+
+[http://review.gluster.org/5821 http://review.gluster.org/5821], &amp;quot;tests: call 'cleanup' at the end of each test&amp;quot;, [https://bugzilla.redhat.com/show_bug.cgi?id=1004756 https://bugzilla.redhat.com/show_bug.cgi?id=1004756], backport of 983975
+
+[http://review.gluster.org/5822 http://review.gluster.org/5822], &amp;quot;glusterfs-api.pc.in contains an rpath&amp;quot;, [https://bugzilla.redhat.com/show_bug.cgi?id=1004751 https://bugzilla.redhat.com/show_bug.cgi?id=1004751], backport of 1002220
+
+[http://review.gluster.org/5824 http://review.gluster.org/5824] &amp;quot;glusterd.service (systemd), ensure glusterd starts before any local gluster mounts&amp;quot;, [https://bugzilla.redhat.com/show_bug.cgi?id=1004796 https://bugzilla.redhat.com/show_bug.cgi?id=1004796], backport of 1004795
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=819130 https://bugzilla.redhat.com/show_bug.cgi?id=819130] meta, check that glusterfs.spec.in has all relevant updates
+
+[https://bugzilla.redhat.com/show_bug.cgi?id=1012400 https://bugzilla.redhat.com/show_bug.cgi?id=1012400] - Glusterd would not store all the volumes when a global options were set leading to peer rejection
+
+== Requested Backports ==
+
+* Please backport [http://review.gluster.org/#/c/6552 gfapi: Closed the logfile fd and initialize to NULL in glfs_fini] into release-3.5 - Done
+* Please backport [http://review.gluster.org/5178 cluster/dht: Make sure loc has gfid] into release-3.4
+* Please backport [http://goo.gl/QjeMP Bug 887098] into release-3.3 (FyreFoX) - Done
+* Please backport [http://goo.gl/9cGAC Bug 856341] into release-3.2 and release-3.3 (the-me o/b/o Debian) - Done for release-3.3
+* Please backport [http://goo.gl/ZNs3J Bug 895656] into release-3.2 and release-3.3 (semiosis, x4rlos) - Done for release-3.3
+* Please backport [http://goo.gl/1QRyw Bug 918437] into release-3.3 (tjstansell) - Done
+* Please backport into [https://bugzilla.redhat.com/show_bug.cgi?id=884597 Bug 884597] release-3.3 (nocko) - Done
+
+== Unaddressed bugs ==
+
+* [https://bugzilla.redhat.com/show_bug.cgi?id=838784 Bug 838784]
+* [https://bugzilla.redhat.com/show_bug.cgi?id=893778 Bug 893778]
+* [https://bugzilla.redhat.com/show_bug.cgi?id=913699 Bug 913699]; possibly related to [https://bugzilla.redhat.com/show_bug.cgi?id=884597 Bug 884597]
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

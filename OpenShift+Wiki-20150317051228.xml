@@ -1,0 +1,301 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Understanding Various Translators</title>
+    <ns>0</ns>
+    <id>101</id>
+      <sha1>o6mr29vzokujdjs87lb5rton39zwpdf</sha1>
+    <revision>
+      <id>458</id>
+      <timestamp>2015-03-06T06:25:23Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   === Contents ===  * [[#Translator_Inventory|1 Translator Inventory]] ** [[#Obsolete_Transla...&quot;</comment>
+      <text xml:space="preserve" bytes="2600">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+=== Contents ===
+
+* [[#Translator_Inventory|1 Translator Inventory]]
+** [[#Obsolete_Translators|1.1 Obsolete Translators]]
+** [[#AFR|1.2 AFR]]
+** [[#DHT|1.3 DHT]]
+
+== Translator Inventory ==
+
+{|
+!Translator
+!Function
+!Current API
+!CLI Support
+|-
+|bindings/python
+|
+|
+|
+|-
+|cluster/afr
+|synchronous replication
+|yes
+|yes
+|-
+|cluster/dht
+|distributed hash table
+|yes
+|yes
+|-
+|cluster/nufa
+|DHT alternative. Adds support for local data
+|yes
+|no
+|-
+|cluster/switch
+|DHT alternative data placement based on file type
+|yes
+|no
+|-
+|cluster/ha
+|redundant paths to brick
+|
+|no
+|-
+|cluster/map
+|
+|
+|
+|-
+|cluster/striping
+|striped volumes
+|yes
+|yes
+|-
+|debug/error-gen
+|
+|
+|
+|-
+|debug/io-stats
+|
+|
+|
+|-
+|debug-trace
+|
+|
+|
+|-
+|encryption/rot-13
+|sample encryption translator using trivial bit rotation scheme
+|yes
+|no
+|-
+|features/filter
+|
+|
+|
+|-
+|features/index
+|
+|
+|
+|-
+|features/locks
+|
+|
+|
+|-
+|features/mac-compat
+|
+|
+|
+|-
+|features/path-converter
+|
+|
+|
+|-
+|features/marker
+|change detection for georep. maintains xtime
+|yes
+|yes
+|-
+|features/path-converter
+|
+|
+|
+|-
+|features/quiesce
+|
+|
+|
+|-
+|features/quota
+|volume quota management
+|yes
+|yes
+|-
+|features/read-only
+|
+|
+|
+|-
+|features/trash
+|trash can functionality
+|
+|
+|-
+|lib/libxlator
+|
+|
+|
+|-
+|meta/meta
+|created filtered view of volume
+|no
+|no
+|-
+|mgmt/glusterd
+|management agent for each server
+|yes
+|yes
+|-
+|mount/fuse
+|
+|
+|
+|-
+|nfs/server
+|NFSv3 server. top of translator stack
+|yes
+|yes
+|-
+|performance/io-cache
+|
+|
+|
+|-
+|performance/io-threads
+|
+|
+|
+|-
+|performance/md-cache
+|metadata cache
+|
+|
+|-
+|performance/quick-read
+|
+|
+|
+|-
+|performance/read-ahead
+|
+|
+|
+|-
+|performance/symlink-cache
+|
+|
+|
+|-
+|performance/write-behind
+|
+|
+|
+|-
+|protocol/auth
+|
+|
+|
+|-
+|protocol/client
+|client side of RPC translator
+|yes
+|yes
+|-
+|protocol/server
+|server side of RPC translator
+|yes
+|yes
+|-
+|storage/posix
+|bottom of stack. stores and accesses data from local file system
+|
+|
+|-
+|system/posix-acl
+|
+|
+|
+|-
+|
+|
+|
+|
+|}
+
+=== Obsolete Translators ===
+
+{|
+!Translator
+!Function
+!API
+!CLI Support
+|-
+|cluster/unity
+|data distribution, replaced by dht
+|
+|
+|-
+|storage/bdb
+|persists data to bdb as alternative to local file system
+|no
+|no
+|}
+
+=== AFR ===
+
+Jeff Darcy’s blog entry on [http://hekafs.org/index.php/2012/03/glusterfs-algorithms-replication-present/ AFR].
+
+=== DHT ===
+
+Jeff Darcy’s blog entry on [http://hekafs.org/index.php/2012/03/glusterfs-algorithms-distribution/ DHT]
+
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

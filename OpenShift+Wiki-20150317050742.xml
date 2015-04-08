@@ -1,0 +1,99 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS Intallation Guide</title>
+    <ns>0</ns>
+    <id>81</id>
+      <sha1>jemtkfbr94a229abkag51krb7czplqd</sha1>
+    <revision>
+      <id>394</id>
+      <timestamp>2015-03-02T06:34:19Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}   === Installing Gluster ===  For RPM based distributions, if you will be using InfiniBand, a...&quot;</comment>
+      <text xml:space="preserve" bytes="2392">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+=== Installing Gluster ===
+
+For RPM based distributions, if you will be using InfiniBand, add the glusterfs RDMA package to the installations. For RPM based systems, yum is used as the install method in order to satisfy external depencies such as compat-readline5
+
+====== For Debian ======
+
+Download the packages
+
+&lt;pre&gt;wget -nd -nc -r -A.deb http://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/wheezy/&lt;/pre&gt;
+(Note from reader: The above does not work. Check [http://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/ http://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/] for 3.5 version or use [http://packages.debian.org/wheezy/glusterfs-server debian repos for 3.2 in wheezy].)
+
+Install the Gluster packages (do this on both servers)
+
+&lt;pre&gt;dpkg -i glusterfs_3.5.2-4_amd64.deb&lt;/pre&gt;
+====== For Ubuntu ======
+
+If you haven't already done so, install python-software-properties:
+
+&lt;pre&gt;sudo apt-get install python-software-properties&lt;/pre&gt;
+Then add the community GlusterFS PPA:
+
+&lt;pre&gt;sudo add-apt-repository ppa:semiosis/ubuntu-glusterfs-3.5
+sudo apt-get update&lt;/pre&gt;
+Finally, install the packages:
+
+&lt;pre&gt;sudo apt-get install glusterfs-server&lt;/pre&gt;
+''Note: Packages exist for Ubuntu 12.04 LTS, 12.10, 13.10, and 14.04 LTS''
+
+====== For Red Hat/CentOS ======
+
+Download the packages (modify URL for your specific release and architecture).
+
+&lt;pre&gt;wget -l 1 -nd -nc -r -A.rpm http://download.gluster.org/pub/gluster/glusterfs/LATEST/RHEL/epel-6/x86_64/&lt;/pre&gt;
+Install the Gluster packages (do this on both servers)
+
+&lt;pre&gt;yum install glusterfs-3.3.0-1.el6.x86_64.rpm glusterfs-fuse-3.3.0-1.el6.x86_64.rpm glusterfs-geo-replication-3.3.0-1.el6.x86_64.rpm glusterfs-server-3.3.0-1.el6.x86_64.rpm&lt;/pre&gt;
+====== For Fedora ======
+
+Download the packages:
+
+&lt;pre&gt;wget -l 1 -nd -nc -r -A.rpm http://download.gluster.org/pub/gluster/glusterfs/LATEST/Fedora/&lt;/pre&gt;
+Install the Gluster packages (do this on both servers)
+
+&lt;pre&gt;yum install glusterfs-3.3.0-1.fc16.x86_64.rpm glusterfs-fuse-3.3.0-1.fc16.x86_64.rpm glusterfs-geo-replication-3.3.0-1.fc16.x86_64.rpm glusterfs-server-3.3.0-1.fc16.x86_64.rpm&lt;/pre&gt;
+Once you are finished installing, you can move on to [[GlusterFS_configure|configuration]].
+
+
+&lt;br /&gt;&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

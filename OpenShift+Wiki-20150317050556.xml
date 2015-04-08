@@ -1,0 +1,122 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Features Overview</title>
+    <ns>0</ns>
+    <id>96</id>
+      <sha1>nl38s1mj62799ecwwaqd6uh0btq7uz6</sha1>
+    <revision>
+      <id>448</id>
+      <timestamp>2015-03-06T06:14:03Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="3619">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+
+This is a place-holder for description of features in GlusterFS. All new features to be developed will need an entry here.
+
+[http://www.gluster.org/documentation/architecture/features/BD '''Block Device Translator''']
+
+Block Device translator
+
+[http://www.gluster.org/documentation/architecture/features/client_t '''client_t''']
+
+Refactor server_connection_t in xlator/protocol/server to a new client_t in libglusterfs.
+
+[http://www.gluster.org/documentation/architecture/features/Disperse '''Disperse''']
+
+A new layout translator that uses an information dispersal algorithm (IDA) to fragment the file contents and disperse them amongst a set of bricks with a configurable level of redundancy
+
+[http://www.gluster.org/documentation/architecture/features/DRC '''Duplicate Request Cache''']
+
+DRC for GlusterNFS to provide resilience to rpc restransmissions of non-idempotent operations.
+
+[http://www.gluster.org/documentation/architecture/features/ElasticBrick '''Elastic Brick''']
+
+Currently in concept.
+
+[http://www.gluster.org/documentation/architecture/features/event-history '''Event History''']
+
+Maintain an in-memory history of events happening
+
+[http://www.gluster.org/documentation/architecture/features/Hooks '''Event Hooks''']
+
+Volume lifecycle extensions.
+
+[http://www.gluster.org/documentation/architecture/features/Inotify '''Inotify''']
+
+Inotify is a File system event monitoring tool which is is essential for many types of programs ranging from file managers to security tools.
+
+[http://www.gluster.org/documentation/architecture/features/multi-tenancy '''Multi Tenancy'''] Concept stage
+
+[http://www.gluster.org/documentation/architecture/features/NFSACL '''NFSACL''']
+
+ACLv3 support for NFS.
+
+[http://www.gluster.org/documentation/architecture/features/Opversion '''Operating Version''']
+
+“operating-version” support in ''glusterd'' is required to ensure that different versions of gluster binary bits interact with each other without problems.
+
+[http://www.gluster.org/documentation/architecture/features/PuppetModule '''Puppet Module'''] [http://www.gluster.org/documentation/architecture/features/PuppetModuleWIP '''Puppet Module (WIP)''']
+
+Build a puppet module for installing/adding node to a Gluster cluster.
+
+[http://www.gluster.org/documentation/architecture/features/Server-quorum '''Server Quorum''']
+
+This feature, when enabled, kills the bricks in the volume that do not meet the quorum because of network splits/outages.
+
+[http://www.gluster.org/documentation/architecture/features/snapshot '''Snapshot''']
+
+Crash consistent snapshot of glusterfs volumes
+
+[http://www.gluster.org/documentation/architecture/features/SplitNetwork '''Split Network''']
+
+For many users, having a separate network exclusively for servers is highly desirable for both performance reasons (segregating administrative traffic and/or second-hop NFS traffic from ongoing user I/O) and security reasons (limiting administrative access to the private network).
+
+[http://www.gluster.org/documentation/architecture/features/worm '''Write Once Read Many times option''']
+
+“worm” support in ''gluster volume set &amp;lt;volname&amp;gt; worm on'' is required to enable volumes to be converted a worm type.
+
+=== Feature Template ===
+
+To introduce new features, see the link below. Be sure to include links to code or a site where you describe the project.
+
+[http://www.gluster.org/documentation/architecture/Feature_Template Feature Template]
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,77 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Archived Docs</title>
+    <ns>0</ns>
+    <id>76</id>
+      <sha1>dbd32ih7nep1i109e6nnknvxmgjm9cc</sha1>
+    <revision>
+      <id>437</id>
+      <timestamp>2015-03-06T05:20:02Z</timestamp>
+      <contributor>
+        <ip>127.11.68.1</ip>
+      </contributor>
+      <text xml:space="preserve" bytes="1986">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+&lt;br /&gt;
+This is where you'll find documentation for previous releases of GlusterFS( versions 3.2, 3.3 beta, and earlier).&lt;br /&gt;
+
+==='''GlusterFS 3.3 Beta Docs'''===
+
+These docs are deprecated but included here for completeness.
+
+*[http://www.gluster.org/community/documentation/index.php/3.3beta GlusterFS 3.3 Beta Resources] - includes latest downloand links and guides for using Unified File and Object and Scale-out Storage for Hadoop&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/GlusterFest GlusterFest] - testing basic features; finding (and hopefully squashing) bugs
+
+==='''GlusterFS 3.2 Documentation'''===
+
+*[http://www.gluster.org/community/documentation/index.php/Gluster_3.2_Filesystem_Administration_Guide Gluster_3.2_Filesystem_Administration_Guide]
+*[http://www.gluster.org/community/documentation/index.php/Archives/Gluster_3.2:_Brick_Restoration_-_Replace_Crashed_Server Archives/Gluster_3.2:_Brick_Restoration_-_Replace_Crashed_Server]
+
+==='''GlusterFS 3.1'''===
+
+*[[Gluster 3.1x Documentation]]
+
+==='''Helpful Information'''===
+
+*[http://www.gluster.org/community/documentation/index.php/Gluster_3.2:_Prior_Release_Notes Gluster 3.2: Prior Release Notes]&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/Gluster_3.0_to_3.2_Upgrade_Guide Gluster 3.0 to 3.2 Upgrade Guide]&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/Archives/Development_Work_Flow Archives/Development Work Flow]&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/Gluster_Glossary Gluster Glossary]&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/Gluster_Translators Gluster Translators]&lt;br /&gt;
+*[http://www.gluster.org/community/documentation/index.php/Gluster_Use_case_deployments_descriptions Gluster Use case deployments descriptions]&lt;br /&gt;
+
+
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

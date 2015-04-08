@@ -1,0 +1,107 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS configure</title>
+    <ns>0</ns>
+    <id>82</id>
+      <sha1>cw4o3r5447wjsy86kxtxpk8u6eha72j</sha1>
+    <revision>
+      <id>395</id>
+      <timestamp>2015-03-02T06:51:31Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  === Configure Firewall ===  For the Gluster to communicate within a cluster either the firew...&quot;</comment>
+      <text xml:space="preserve" bytes="4161">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+=== Configure Firewall ===
+
+For the Gluster to communicate within a cluster either the firewalls have to be turned off or enable communication for each server.
+
+&lt;pre&gt;iptables -I INPUT -p all -s &amp;lt;ip-address&amp;gt; -j ACCEPT&lt;/pre&gt;
+=== Configure the trusted pool ===
+
+Remember that the trusted pool is the term used to define a cluster of nodes in Gluster. Choose a server to be your “primary” server. This is just to keep things simple, you will generally want to run all commands from this tutorial. Keep in mind, running many Gluster specific commands (like `gluster volume create`) on one server in the cluster will execute the same command on all other servers.
+
+&lt;pre&gt;gluster peer probe (hostname of the other server in the cluster, or IP address if you don’t have DNS or /etc/hosts entries)&lt;/pre&gt;
+Notice that running `gluster peer status` from the second node shows that the first node has already been added.
+
+=== Partition, Format and mount the bricks ===
+
+Assuming you have a brick at /dev/sdb:
+
+&lt;pre&gt;fdisk /dev/sdb and create a single partition&lt;/pre&gt;
+=== Format the partition ===
+
+&lt;pre&gt;  mkfs.xfs -i size=512 /dev/sdb1&lt;/pre&gt;
+=== Mount the partition as a Gluster &amp;quot;brick&amp;quot; ===
+
+&lt;pre&gt;  mkdir -p /export/sdb1 &amp;amp;&amp;amp; mount /dev/sdb1 /export/sdb1 &amp;amp;&amp;amp; mkdir -p /export/sdb1/brick&lt;/pre&gt;
+=== Add an entry to /etc/fstab ===
+
+&lt;pre&gt;  echo &amp;quot;/dev/sdb1 /export/sdb1 xfs defaults 0 0&amp;quot;  &amp;gt;&amp;gt; /etc/fstab&lt;/pre&gt;
+==== Set up a Gluster volume ====
+
+The most basic Gluster volume type is a “Distribute only” volume (also referred to as a “pure DHT” volume if you want to impress the folks at the water cooler). This type of volume simply distributes the data evenly across the available bricks in a volume. So, if I write 100 files, on average, fifty will end up on one server, and fifty will end up on another. This is faster than a “replicated” volume, but isn’t as popular since it doesn’t give you two of the most sought after features of Gluster — multiple copies of the data, and automatic failover if something goes wrong. To set up a replicated volume:
+
+&lt;pre&gt;gluster volume create gv0 replica 2 node01.mydomain.net:/export/sdb1/brick node02.mydomain.net:/export/sdb1/brick&lt;/pre&gt;
+Breaking this down into pieces, the first part says to create a gluster volume named gv0 (the name is arbitrary, gv0 was chosen simply because it’s less typing than gluster_volume_0). Next, we tell it to make the volume a replica volume, and to keep a copy of the data on at least 2 bricks at any given time. Since we only have two bricks total, this means each server will house a copy of the data. Lastly, we specify which nodes to use, and which bricks on those nodes. The order here is important when you have more bricks…it is possible (as of the most current release as of this writing, Gluster 3.3) to specify the bricks in a such a way that you would make both copies of the data reside on a single node. This would make for an embarrassing explanation to your boss when your bulletproof, completely redundant, always on super cluster comes to a grinding halt when a single point of failure occurs.
+
+Now, we can check to make sure things are working as expected:
+
+&lt;pre&gt;gluster volume info&lt;/pre&gt;
+And you should see results similar to the following:
+
+&lt;pre&gt;Volume Name: gv0
+Type: Replicate
+Volume ID: 8bc3e96b-a1b6-457d-8f7a-a91d1d4dc019
+Status: Created
+Number of Bricks: 1 x 2 = 2
+Transport-type: tcp
+Bricks:
+Brick1: node01.yourdomain.net:/export/sdb1/brick
+Brick2: node02.yourdomain.net:/export/sdb1/brick&lt;/pre&gt;
+This shows us essentially what we just specified during the volume creation. The one this to mention is the “Status”. A status of “Created” means that the volume has been created, but hasn’t yet been started, which would cause any attempt to mount the volume fail.
+
+Now, we should start the volume.
+
+&lt;pre&gt;gluster volume start gv0&lt;/pre&gt;
+Well, now, that wasn't so hard, was it? Let's make like a burrito and [[wrap up]].
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

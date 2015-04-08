@@ -1,0 +1,163 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Admin Directory Quota</title>
+    <ns>0</ns>
+    <id>55</id>
+      <sha1>tbe3j29qkzq2px6ecz6tyu7psa2xovz</sha1>
+    <revision>
+      <id>333</id>
+      <timestamp>2015-02-26T09:09:31Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = Managing Directory Quota =  Directory quotas in GlusterFS allow you to set limits on usage...&quot;</comment>
+      <text xml:space="preserve" bytes="5605">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= Managing Directory Quota =
+
+Directory quotas in GlusterFS allow you to set limits on usage of disk space by directories or volumes. The storage administrators can control the disk space utilization at the directory and/or volume levels in GlusterFS by setting limits to allocatable disk space at any level in the volume and directory hierarchy. This is particularly useful in cloud deployments to facilitate utility billing model.
+
+&lt;blockquote&gt;'''Note'''
+
+For now, only Hard limit is supported. Here, the limit cannot be exceeded and attempts to use more disk space or inodes beyond the set limit will be denied.
+&lt;/blockquote&gt;
+System administrators can also monitor the resource utilization to limit the storage for the users depending on their role in the organization.
+
+You can set the quota at the following levels:
+
+* '''Directory level''' – limits the usage at the directory level
+* '''Volume level''' – limits the usage at the volume level
+
+&lt;blockquote&gt;'''Note'''
+
+You can set the disk limit on the directory even if it is not created. The disk limit is enforced immediately after creating that directory. For more information on setting disk limit, see ?.
+&lt;/blockquote&gt;
+== Enabling Quota ==
+
+You must enable Quota to set disk limits.
+
+'''To enable quota'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Enable the quota using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  enable&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to enable quota on test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume enable
+Quota is enabled on /test-volume&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Disabling Quota ==
+
+You can disable Quota, if needed.
+
+'''To disable quota:'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Disable the quota using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  disable&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to disable quota translator on test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume disable
+Quota translator is disabled on /test-volume&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Setting or Replacing Disk Limit ==
+
+You can create new directories in your storage environment and set the disk limit or set disk limit for the existing directories. The directory name should be relative to the volume with the export directory/mount being treated as &amp;quot;/&amp;quot;.
+
+'''To set or replace disk limit'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Set the disk limit using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  limit-usage /&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to set limit on data directory on test-volume where data is a directory under the export directory:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume limit-usage /data 10GB
+Usage limit has been set on /data&lt;/pre&gt;
+&lt;blockquote&gt;&lt;p&gt;'''Note'''&lt;/p&gt;
+&lt;p&gt;In a multi-level directory hierarchy, the strictest disk limit will be considered for enforcement.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Displaying Disk Limit Information ==
+
+You can display disk limit information on all the directories on which the limit is set.
+
+'''To display disk limit information'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Display disk limit information of all the directories on which limit is set, using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  list&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to see the set disks limit on test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume list
+
+
+/Test/data    10 GB       6 GB
+/Test/data1   10 GB       4 GB&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Display disk limit information on a particular directory on which limit is set, using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  list&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to see the set limit on /data directory of test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume list /data
+
+
+/Test/data    10 GB       6 GB&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Updating Memory Cache Size ==
+
+For performance reasons, quota caches the directory sizes on client. You can set timeout indicating the maximum valid duration of directory sizes in cache, from the time they are populated.
+
+For example: If there are multiple clients writing to a single directory, there are chances that some other client might write till the quota limit is exceeded. However, this new file-size may not get reflected in the client till size entry in cache has become stale because of timeout. If writes happen on this client during this duration, they are allowed even though they would lead to exceeding of quota-limits, since size in cache is not in sync with the actual size. When timeout happens, the size in cache is updated from servers and will be in sync and no further writes will be allowed. A timeout of zero will force fetching of directory sizes from server for every operation that modifies file data and will effectively disables directory size caching on client side.
+
+'''To update the memory cache size'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Update the memory cache size using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume set  features.quota-timeout&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to update the memory cache size for every 5 seconds on test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume set test-volume features.quota-timeout 5
+Set volume successful&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+== Removing Disk Limit ==
+
+You can remove set disk limit, if you do not want quota anymore.
+
+'''To remove disk limit'''
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Remove disk limit set on a particular directory using the following command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;# gluster volume quota  remove&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, to remove the disk limit on /data directory of test-volume:&lt;/p&gt;
+&lt;pre&gt;# gluster volume quota test-volume remove /data
+Usage limit set on /data is removed&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+
+&lt;br /&gt;&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

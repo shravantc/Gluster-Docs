@@ -1,0 +1,66 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>All that Developers need to know</title>
+    <ns>0</ns>
+    <id>77</id>
+      <sha1>sq54mo4211gvrhdgz6t2ljkd5mix9vp</sha1>
+    <revision>
+      <id>462</id>
+      <timestamp>2015-03-10T07:29:26Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <minor/>
+      <text xml:space="preserve" bytes="1255">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+*[http://www.gluster.org/documentation/developers/Contributors_FAQ/ Contributors FAQ]
+*[http://www.gluster.org/documentation/developers/Building_GlusterFS/ Building GlusterFS]
+*[http://www.gluster.org/documentation/developers/Building_QEMU/ Building QEMU with gfapi for Debian based systems]
+*[[Gluster Testing]]
+*[[Development HowTo's]]
+*[http://www.gluster.org/documentation/developers/Development_Work_Flow/ Development workflow]
+*[http://www.gluster.org/documentation/developers/Simplified_dev_workflow/ Simplified Development Workflow]
+*[http://www.gluster.org/documentation/developers/Using_the_Gluster_Test_Framework/ Gluster Test Framework]
+*[[Fixing issues reported by tools for static code analysis]]
+*[http://www.gluster.org/documentation/developers/Bug_reporting_guidelines/ Bug Reporting Guidelines]
+*[http://www.gluster.org/documentation/developers/Bug_report_life_cycle/ Bug Report Lifecycles]
+*[http://www.gluster.org/documentation/developers/Bug_report_template/ Bug Report Template]
+*[http://www.gluster.org/documentation/developers/Bug_triage/ Bug Triage ]
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

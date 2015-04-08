@@ -1,0 +1,90 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GlusterFS Security</title>
+    <ns>0</ns>
+    <id>88</id>
+      <sha1>6r40i1hfwzipgxnzxx9z7xg5bwv2cz2</sha1>
+    <revision>
+      <id>409</id>
+      <timestamp>2015-03-02T10:33:29Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  == GlusterFS Security ==  So you want to enable SSL on glusterfs and you are lost? Well you ...&quot;</comment>
+      <text xml:space="preserve" bytes="1730">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+== GlusterFS Security ==
+
+So you want to enable SSL on glusterfs and you are lost? Well you are not alone - SSL mode is not documented and you can find little info about it on mailing lists. I will try to help you out with this small tips...
+
+So here it goes, first you need to generate SSL certificates using following commands:
+
+&lt;pre&gt;openssl genrsa -out glusterfs.key 1024
+openssl req -new -x509 -key gluster.key -subj /CN=Anyone -out glusterfs.pem&lt;/pre&gt;
+Now you need to move that files into proper location, gluster have that hardcoded, so until you don't want to mess with sources put them into /etc/ssl/. Next step is to create glusterfs.ca file - you do that by simply copy glusterfs.pem into glusterfs.ca. You should end-up with this files in /etc/ssl/:
+
+&lt;pre&gt;glusterfs.ca
+glusterfs.key
+glusterfs.pem&lt;/pre&gt;
+Now, let's finally enable SSL mode on the volume. Do it by setting following parameters on volume:
+
+&lt;pre&gt;gluster volume set gv0 client.ssl on
+gluster volume set gv0 server.ssl on&lt;/pre&gt;
+Verify:
+
+&lt;pre&gt;gluster volume info gv0
+
+Volume Name: gv0
+Type: Replicate
+Volume ID: c9205800-11e7-491d-be9b-d695098beddc
+Status: Started
+Number of Bricks: 1 x 2 = 2
+Transport-type: tcp
+Bricks:
+Brick1: mx-1:/export/brick1
+Brick2: mx-2:/export/brick1
+Options Reconfigured:
+server.ssl: on
+client.ssl: on&lt;/pre&gt;
+stop gv0, restart glusterd, start gv0 and to be sure that SSL is working, checkout glustershd.log log, it should read:
+
+&lt;pre&gt;[socket.c:3480:socket_init] 0-gv0-client-0: SSL support is ENABLED&lt;/pre&gt;
+repeat that procedure on all nodes, that's all!
+
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>

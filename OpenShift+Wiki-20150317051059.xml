@@ -1,0 +1,172 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="en">
+  <siteinfo>
+    <sitename>OpenShift Wiki</sitename>
+    <base>http://mediawiki-arao.itos.redhat.com/index.php/Main_Page</base>
+    <generator>MediaWiki 1.19.15</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OpenShift Wiki</namespace>
+      <namespace key="5" case="first-letter">OpenShift Wiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>QuickStart</title>
+    <ns>0</ns>
+    <id>94</id>
+      <sha1>m7tn1qcoticu654qj41s82feahyt5k4</sha1>
+    <revision>
+      <id>429</id>
+      <timestamp>2015-03-04T06:47:57Z</timestamp>
+      <contributor>
+        <username>Schandra</username>
+        <id>7</id>
+      </contributor>
+      <comment>Created page with &quot;{| class=&quot;wikitable&quot; !'''''[[Gluster_File_System_Documentation | Home!!]]''''' |}  = QuickStart =  === From GlusterDocumentation ===  == Purpose ==  This document is intended ...&quot;</comment>
+      <text xml:space="preserve" bytes="6484">{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}
+
+= QuickStart =
+
+=== From GlusterDocumentation ===
+
+== Purpose ==
+
+This document is intended to give you a step by step guide to setting up GlusterFS for the first time. For this tutorial, we will assume you are using Fedora 20 virtual machines (other distributions and methods can be found in the new user guide, below. We also do not explain the steps in detail here, this guide is just to help you get it up and running as soon as possible. After you deploy GlusterFS by following these steps, we recommend that you read the GlusterFS Admin Guide to learn how to administer GlusterFS and how to select a volume type that fits your needs. Read the GlusterFS New User Guide for a more detailed explanation of the steps we took here. We want you to be successful in as short a time as possible.
+
+If you would like a more detailed walk through with instructions for installing using different methods (in local virtual machines, EC2 and baremetal) and different distributions, then have a look at the [http://www.gluster.org/community/documentation/index.php/Getting_started_overview Getting Started] with GlusterFS guide.
+
+=== Automatically Deploying GlusterFS with Puppet-Gluster+Vagrant ===
+
+If you'd like to deploy GlusterFS automatically using Puppet-Gluster+Vagrant, have a look at [https://ttboj.wordpress.com/2014/01/08/automatically-deploying-glusterfs-with-puppet-gluster-vagrant/ this article].
+
+&lt;br /&gt;
+
+=== Really Really Quick Start Guide ===
+
+If you want the bare minumum steps to getting started with GlusterFS, take a look at the [http://www.gluster.org/community/documentation/index.php/Getting_started_rrqsg Really Really Quick Start Guide].
+
+&lt;br /&gt;
+
+=== Step 1 – Have at least two nodes ===
+
+* Fedora 20 on two nodes named &amp;quot;server1&amp;quot; and &amp;quot;server2&amp;quot;
+* A working network connection
+* At two virtual disks, one for the OS installation, and one to be used to serve GlusterFS storage (sdb). This will emulate a real world deployment, where you would want to separate GlusterFS storage from the OS install.
+* Note: GlusterFS stores its dynamically generated configuration files at /var/lib/glusterd. If at any point in time GlusterFS is unable to write to these files, it will at minimum cause erratic behavior for your system; or worse, take your system offline completely. It is advisable to create separate partitions for directories such as /var/log to ensure this does not happen.
+
+=== Step 2 - Format and mount the bricks ===
+
+(on both nodes): Note: These examples are going to assume the brick is going to reside on /dev/sdb1.
+
+&lt;pre&gt;  mkfs.xfs -i size=512 /dev/sdb1
+  mkdir -p /data/brick1
+  vi /etc/fstab&lt;/pre&gt;
+Add the following:
+
+&lt;pre&gt;  /dev/sdb1 /data/brick1 xfs defaults 1 2&lt;/pre&gt;
+Save the file and exit
+
+&lt;pre&gt;  mount -a &amp;amp;&amp;amp; mount&lt;/pre&gt;
+You should now see sdb1 mounted at /data/brick1
+
+=== Step 3 - Installing GlusterFS ===
+
+(on both servers) Install the software
+
+&lt;pre&gt;  yum install glusterfs-server&lt;/pre&gt;
+Start the GlusterFS management daemon:
+
+&lt;pre&gt;  service glusterd start
+  service glusterd status
+  glusterd.service - LSB: glusterfs server
+      Loaded: loaded (/etc/rc.d/init.d/glusterd)
+      Active: active (running) since Mon, 13 Aug 2012 13:02:11 -0700; 2s ago
+     Process: 19254 ExecStart=/etc/rc.d/init.d/glusterd start (code=exited, status=0/SUCCESS)
+      CGroup: name=systemd:/system/glusterd.service
+          ├ 19260 /usr/sbin/glusterd -p /run/glusterd.pid
+          ├ 19304 /usr/sbin/glusterfsd --xlator-option georep-server.listen-port=24009 -s localhost...
+          └ 19309 /usr/sbin/glusterfs -f /var/lib/glusterd/nfs/nfs-server.vol -p /var/lib/glusterd/...&lt;/pre&gt;
+=== Step 4 - Configure SELinux and iptables ===
+
+''This is only appicable to Fedora 19 or previous versions. Fedora 20 and later should work fine with SELinux''
+
+Change SELinux to either “permissive” or “disabled” mode To put SELinux in permissive mode
+
+&lt;pre&gt;   setenforce 0&lt;/pre&gt;
+To see the current mode of SELinux
+
+&lt;pre&gt;   getenforce&lt;/pre&gt;
+To make the SELinux changes permanent
+
+&lt;pre&gt;   Change “/etc/selinux/config” and make “SELINUX=disabled” or ”SELINUX=permissive” in it&lt;/pre&gt;
+Remove all iptable rules, so that it does not interfere with Gluster
+
+&lt;pre&gt;   iptables -F&lt;/pre&gt;
+=== Step 5 - Configure the trusted pool ===
+
+From &amp;quot;server1&amp;quot;
+
+&lt;pre&gt;  gluster peer probe server2&lt;/pre&gt;
+Note: When using hostnames, the first server needs to be probed from '''''one''''' other server to set its hostname.
+
+From &amp;quot;server2&amp;quot;
+
+&lt;pre&gt;  gluster peer probe server1&lt;/pre&gt;
+Note: Once this pool has been established, only trusted members may probe new servers into the pool. A new server cannot probe the pool, it must be probed from the pool.
+
+=== Step 6 - Set up a GlusterFS volume ===
+
+On both server1 and server2:
+
+&lt;pre&gt; mkdir /data/brick1/gv0&lt;/pre&gt;
+From any single server:
+
+&lt;pre&gt;  gluster volume create gv0 replica 2 server1:/data/brick1/gv0 server2:/data/brick1/gv0
+  gluster volume start gv0&lt;/pre&gt;
+Confirm that the volume shows &amp;quot;Started&amp;quot;:
+
+&lt;pre&gt;  gluster volume info&lt;/pre&gt;
+Note: If the volume is not started, clues as to what went wrong will be in log files under /var/log/glusterfs on one or both of the servers - usually in etc-glusterfs-glusterd.vol.log
+
+=== Step 7 - Testing the GlusterFS volume ===
+
+For this step, we will use one of the servers to mount the volume. Typically, you would do this from an external machine, known as a &amp;quot;client&amp;quot;. Since using the method here would require additional packages be installed on the client machine, we will use the servers as a simple place to test first.
+
+&lt;pre&gt;  mount -t glusterfs server1:/gv0 /mnt
+  for i in `seq -w 1 100`; do cp -rp /var/log/messages /mnt/copy-test-$i; done&lt;/pre&gt;
+First, check the mount point:
+
+&lt;pre&gt;  ls -lA /mnt | wc -l&lt;/pre&gt;
+You should see 100 files returned. Next, check the GlusterFS mount points on each server:
+
+&lt;pre&gt;  ls -lA /data/brick1/gv0&lt;/pre&gt;
+You should see 100 per server using the method we listed here. Without replication, in a distribute only volume (not detailed here), you should see about 50 each.
+
+== Wrap Up ==
+
+So, that's it, about as fast as it can be shown. Make sure to have a look at the Admin Guide and New User guide to help you get a deeper understanding, but this is a great start to have a place to test things out.
+&lt;br /&gt;
+&lt;br /&gt;
+{| class=&quot;wikitable&quot;
+!'''''[[Gluster_File_System_Documentation | Home!!]]'''''
+|}</text>
+    </revision>
+  </page>
+</mediawiki>
